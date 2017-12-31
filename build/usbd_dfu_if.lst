@@ -1,0 +1,1243 @@
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"usbd_dfu_if.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.GetSector,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu fpv4-sp-d16
+  24              	GetSector:
+  25              	.LFB128:
+  26              		.file 1 "Src/usbd_dfu_if.c"
+   1:Src/usbd_dfu_if.c **** /**
+   2:Src/usbd_dfu_if.c ****   ******************************************************************************
+   3:Src/usbd_dfu_if.c ****   * @file           : usbd_dfu_if.c
+   4:Src/usbd_dfu_if.c ****   * @brief          :
+   5:Src/usbd_dfu_if.c ****   ******************************************************************************
+   6:Src/usbd_dfu_if.c ****   * This notice applies to any and all portions of this file
+   7:Src/usbd_dfu_if.c ****   * that are not between comment pairs USER CODE BEGIN and
+   8:Src/usbd_dfu_if.c ****   * USER CODE END. Other portions of this file, whether 
+   9:Src/usbd_dfu_if.c ****   * inserted by the user or by software development tools
+  10:Src/usbd_dfu_if.c ****   * are owned by their respective copyright owners.
+  11:Src/usbd_dfu_if.c ****   *
+  12:Src/usbd_dfu_if.c ****   * Copyright (c) 2017 STMicroelectronics International N.V. 
+  13:Src/usbd_dfu_if.c ****   * All rights reserved.
+  14:Src/usbd_dfu_if.c ****   *
+  15:Src/usbd_dfu_if.c ****   * Redistribution and use in source and binary forms, with or without 
+  16:Src/usbd_dfu_if.c ****   * modification, are permitted, provided that the following conditions are met:
+  17:Src/usbd_dfu_if.c ****   *
+  18:Src/usbd_dfu_if.c ****   * 1. Redistribution of source code must retain the above copyright notice, 
+  19:Src/usbd_dfu_if.c ****   *    this list of conditions and the following disclaimer.
+  20:Src/usbd_dfu_if.c ****   * 2. Redistributions in binary form must reproduce the above copyright notice,
+  21:Src/usbd_dfu_if.c ****   *    this list of conditions and the following disclaimer in the documentation
+  22:Src/usbd_dfu_if.c ****   *    and/or other materials provided with the distribution.
+  23:Src/usbd_dfu_if.c ****   * 3. Neither the name of STMicroelectronics nor the names of other 
+  24:Src/usbd_dfu_if.c ****   *    contributors to this software may be used to endorse or promote products 
+  25:Src/usbd_dfu_if.c ****   *    derived from this software without specific written permission.
+  26:Src/usbd_dfu_if.c ****   * 4. This software, including modifications and/or derivative works of this 
+  27:Src/usbd_dfu_if.c ****   *    software, must execute solely and exclusively on microcontroller or
+  28:Src/usbd_dfu_if.c ****   *    microprocessor devices manufactured by or for STMicroelectronics.
+  29:Src/usbd_dfu_if.c ****   * 5. Redistribution and use of this software other than as permitted under 
+  30:Src/usbd_dfu_if.c ****   *    this license is void and will automatically terminate your rights under 
+  31:Src/usbd_dfu_if.c ****   *    this license. 
+  32:Src/usbd_dfu_if.c ****   *
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 2
+
+
+  33:Src/usbd_dfu_if.c ****   * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
+  34:Src/usbd_dfu_if.c ****   * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
+  35:Src/usbd_dfu_if.c ****   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+  36:Src/usbd_dfu_if.c ****   * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
+  37:Src/usbd_dfu_if.c ****   * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
+  38:Src/usbd_dfu_if.c ****   * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  39:Src/usbd_dfu_if.c ****   * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  40:Src/usbd_dfu_if.c ****   * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+  41:Src/usbd_dfu_if.c ****   * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+  42:Src/usbd_dfu_if.c ****   * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+  43:Src/usbd_dfu_if.c ****   * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  44:Src/usbd_dfu_if.c ****   * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  45:Src/usbd_dfu_if.c ****   *
+  46:Src/usbd_dfu_if.c ****   ******************************************************************************
+  47:Src/usbd_dfu_if.c **** */
+  48:Src/usbd_dfu_if.c **** 
+  49:Src/usbd_dfu_if.c **** /* Includes ------------------------------------------------------------------*/
+  50:Src/usbd_dfu_if.c **** #include "usbd_dfu_if.h"
+  51:Src/usbd_dfu_if.c **** /* USER CODE BEGIN INCLUDE */
+  52:Src/usbd_dfu_if.c **** /* USER CODE END INCLUDE */
+  53:Src/usbd_dfu_if.c **** 
+  54:Src/usbd_dfu_if.c **** /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
+  55:Src/usbd_dfu_if.c ****   * @{
+  56:Src/usbd_dfu_if.c ****   */
+  57:Src/usbd_dfu_if.c **** /** @defgroup USBD_DFU 
+  58:Src/usbd_dfu_if.c ****   * @brief usbd core module
+  59:Src/usbd_dfu_if.c ****   * @{
+  60:Src/usbd_dfu_if.c ****   */
+  61:Src/usbd_dfu_if.c **** 
+  62:Src/usbd_dfu_if.c **** /** @defgroup USBD_DFU_Private_TypesDefinitions
+  63:Src/usbd_dfu_if.c ****   * @{
+  64:Src/usbd_dfu_if.c ****   */
+  65:Src/usbd_dfu_if.c **** /* USER CODE BEGIN PRIVATE_TYPES */
+  66:Src/usbd_dfu_if.c **** /* USER CODE END PRIVATE_TYPES */
+  67:Src/usbd_dfu_if.c **** /**
+  68:Src/usbd_dfu_if.c ****   * @}
+  69:Src/usbd_dfu_if.c ****   */
+  70:Src/usbd_dfu_if.c **** 
+  71:Src/usbd_dfu_if.c **** /** @defgroup USBD_DFU_Private_Defines
+  72:Src/usbd_dfu_if.c ****   * @{
+  73:Src/usbd_dfu_if.c ****   */
+  74:Src/usbd_dfu_if.c **** #define FLASH_DESC_STR "@Internal Flash   /0x08000000/03*016Ka,01*016Kg,01*064Kg,07*128Kg,04*016Kg,
+  75:Src/usbd_dfu_if.c **** /* USER CODE BEGIN PRIVATE_DEFINES */
+  76:Src/usbd_dfu_if.c **** /* USER CODE END PRIVATE_DEFINES */
+  77:Src/usbd_dfu_if.c **** 
+  78:Src/usbd_dfu_if.c **** /**
+  79:Src/usbd_dfu_if.c ****   * @}
+  80:Src/usbd_dfu_if.c ****   */
+  81:Src/usbd_dfu_if.c **** 
+  82:Src/usbd_dfu_if.c **** /** @defgroup USBD_DFU_Private_Macros
+  83:Src/usbd_dfu_if.c ****   * @{
+  84:Src/usbd_dfu_if.c ****   */
+  85:Src/usbd_dfu_if.c **** /* USER CODE BEGIN PRIVATE_MACRO */
+  86:Src/usbd_dfu_if.c **** /* USER CODE END PRIVATE_MACRO */
+  87:Src/usbd_dfu_if.c **** 
+  88:Src/usbd_dfu_if.c **** /**
+  89:Src/usbd_dfu_if.c ****   * @}
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 3
+
+
+  90:Src/usbd_dfu_if.c ****   */
+  91:Src/usbd_dfu_if.c **** 
+  92:Src/usbd_dfu_if.c **** /** @defgroup USBD_AUDIO_IF_Private_Variables
+  93:Src/usbd_dfu_if.c ****   * @{
+  94:Src/usbd_dfu_if.c ****   */
+  95:Src/usbd_dfu_if.c **** /* USER CODE BEGIN PRIVATE_VARIABLES */
+  96:Src/usbd_dfu_if.c **** static const uint16_t TimingTable[24] =
+  97:Src/usbd_dfu_if.c ****     {
+  98:Src/usbd_dfu_if.c ****         FLASH_SECTOR_16KB_WRITE_ERASE_TIME, // SECTOR0
+  99:Src/usbd_dfu_if.c ****         FLASH_SECTOR_16KB_WRITE_ERASE_TIME,
+ 100:Src/usbd_dfu_if.c ****         FLASH_SECTOR_16KB_WRITE_ERASE_TIME,
+ 101:Src/usbd_dfu_if.c ****         FLASH_SECTOR_16KB_WRITE_ERASE_TIME,
+ 102:Src/usbd_dfu_if.c ****         FLASH_SECTOR_64KB_WRITE_ERASE_TIME,
+ 103:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 104:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 105:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 106:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 107:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 108:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 109:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME, // SECTOR11
+ 110:Src/usbd_dfu_if.c **** 
+ 111:Src/usbd_dfu_if.c ****         FLASH_SECTOR_16KB_WRITE_ERASE_TIME, // SECTOR12
+ 112:Src/usbd_dfu_if.c ****         FLASH_SECTOR_16KB_WRITE_ERASE_TIME,
+ 113:Src/usbd_dfu_if.c ****         FLASH_SECTOR_16KB_WRITE_ERASE_TIME,
+ 114:Src/usbd_dfu_if.c ****         FLASH_SECTOR_16KB_WRITE_ERASE_TIME,
+ 115:Src/usbd_dfu_if.c ****         FLASH_SECTOR_64KB_WRITE_ERASE_TIME,
+ 116:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 117:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 118:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 119:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 120:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 121:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME,
+ 122:Src/usbd_dfu_if.c ****         FLASH_SECTOR_128KB_WRITE_ERASE_TIME, // SECTOR23
+ 123:Src/usbd_dfu_if.c **** };
+ 124:Src/usbd_dfu_if.c **** /* USER CODE END PRIVATE_VARIABLES */
+ 125:Src/usbd_dfu_if.c **** 
+ 126:Src/usbd_dfu_if.c **** /**
+ 127:Src/usbd_dfu_if.c ****   * @}
+ 128:Src/usbd_dfu_if.c ****   */
+ 129:Src/usbd_dfu_if.c **** 
+ 130:Src/usbd_dfu_if.c **** /** @defgroup USBD_DFU_IF_Exported_Variables
+ 131:Src/usbd_dfu_if.c ****   * @{
+ 132:Src/usbd_dfu_if.c ****   */
+ 133:Src/usbd_dfu_if.c **** extern USBD_HandleTypeDef hUsbDeviceHS;
+ 134:Src/usbd_dfu_if.c **** /* USER CODE BEGIN EXPORTED_VARIABLES */
+ 135:Src/usbd_dfu_if.c **** /* USER CODE END EXPORTED_VARIABLES */
+ 136:Src/usbd_dfu_if.c **** 
+ 137:Src/usbd_dfu_if.c **** /**
+ 138:Src/usbd_dfu_if.c ****   * @}
+ 139:Src/usbd_dfu_if.c ****   */
+ 140:Src/usbd_dfu_if.c **** 
+ 141:Src/usbd_dfu_if.c **** /** @defgroup USBD_DFU_Private_FunctionPrototypes
+ 142:Src/usbd_dfu_if.c ****   * @{
+ 143:Src/usbd_dfu_if.c ****   */
+ 144:Src/usbd_dfu_if.c **** 
+ 145:Src/usbd_dfu_if.c **** static uint16_t MEM_If_Init_HS(void);
+ 146:Src/usbd_dfu_if.c **** static uint16_t MEM_If_Erase_HS(uint32_t Add);
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 4
+
+
+ 147:Src/usbd_dfu_if.c **** static uint16_t MEM_If_Write_HS(uint8_t *src, uint8_t *dest, uint32_t Len);
+ 148:Src/usbd_dfu_if.c **** static uint8_t *MEM_If_Read_HS(uint8_t *src, uint8_t *dest, uint32_t Len);
+ 149:Src/usbd_dfu_if.c **** static uint16_t MEM_If_DeInit_HS(void);
+ 150:Src/usbd_dfu_if.c **** static uint16_t MEM_If_GetStatus_HS(uint32_t Add, uint8_t Cmd, uint8_t *buffer);
+ 151:Src/usbd_dfu_if.c **** /* USER CODE BEGIN PRIVATE_FUNCTIONS_DECLARATION */
+ 152:Src/usbd_dfu_if.c **** /* USER CODE END PRIVATE_FUNCTIONS_DECLARATION */
+ 153:Src/usbd_dfu_if.c **** 
+ 154:Src/usbd_dfu_if.c **** /**
+ 155:Src/usbd_dfu_if.c ****   * @}
+ 156:Src/usbd_dfu_if.c ****   */
+ 157:Src/usbd_dfu_if.c **** 
+ 158:Src/usbd_dfu_if.c **** #if defined(__ICCARM__) /*!< IAR Compiler */
+ 159:Src/usbd_dfu_if.c **** #pragma data_alignment = 4
+ 160:Src/usbd_dfu_if.c **** #endif
+ 161:Src/usbd_dfu_if.c **** 
+ 162:Src/usbd_dfu_if.c **** __ALIGN_BEGIN USBD_DFU_MediaTypeDef USBD_DFU_fops_HS __ALIGN_END =
+ 163:Src/usbd_dfu_if.c ****     {
+ 164:Src/usbd_dfu_if.c ****         (uint8_t *)FLASH_DESC_STR,
+ 165:Src/usbd_dfu_if.c ****         MEM_If_Init_HS,
+ 166:Src/usbd_dfu_if.c ****         MEM_If_DeInit_HS,
+ 167:Src/usbd_dfu_if.c ****         MEM_If_Erase_HS,
+ 168:Src/usbd_dfu_if.c ****         MEM_If_Write_HS,
+ 169:Src/usbd_dfu_if.c ****         MEM_If_Read_HS,
+ 170:Src/usbd_dfu_if.c ****         MEM_If_GetStatus_HS,
+ 171:Src/usbd_dfu_if.c **** };
+ 172:Src/usbd_dfu_if.c **** 
+ 173:Src/usbd_dfu_if.c **** /* Private functions ---------------------------------------------------------*/
+ 174:Src/usbd_dfu_if.c **** 
+ 175:Src/usbd_dfu_if.c **** /**
+ 176:Src/usbd_dfu_if.c ****   * @brief  MEM_If_Init_HS
+ 177:Src/usbd_dfu_if.c ****   *         Memory initialization routine.
+ 178:Src/usbd_dfu_if.c ****   * @param  None
+ 179:Src/usbd_dfu_if.c ****   * @retval 0 if operation is successful, MAL_FAIL else.
+ 180:Src/usbd_dfu_if.c ****   */
+ 181:Src/usbd_dfu_if.c **** uint16_t MEM_If_Init_HS(void)
+ 182:Src/usbd_dfu_if.c **** {
+ 183:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 6 */
+ 184:Src/usbd_dfu_if.c ****   HAL_FLASH_Unlock();
+ 185:Src/usbd_dfu_if.c ****   return (USBD_OK);
+ 186:Src/usbd_dfu_if.c ****   /* USER CODE END 6 */
+ 187:Src/usbd_dfu_if.c **** }
+ 188:Src/usbd_dfu_if.c **** 
+ 189:Src/usbd_dfu_if.c **** /**
+ 190:Src/usbd_dfu_if.c ****   * @brief  MEM_If_DeInit_HS
+ 191:Src/usbd_dfu_if.c ****    *         De-Initializes Memory.
+ 192:Src/usbd_dfu_if.c ****   * @param  None
+ 193:Src/usbd_dfu_if.c ****   * @retval 0 if operation is successful, MAL_FAIL else.
+ 194:Src/usbd_dfu_if.c ****   */
+ 195:Src/usbd_dfu_if.c **** uint16_t MEM_If_DeInit_HS(void)
+ 196:Src/usbd_dfu_if.c **** {
+ 197:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 7 */
+ 198:Src/usbd_dfu_if.c ****   HAL_FLASH_Lock();
+ 199:Src/usbd_dfu_if.c ****   return (USBD_OK);
+ 200:Src/usbd_dfu_if.c ****   /* USER CODE END 7 */
+ 201:Src/usbd_dfu_if.c **** }
+ 202:Src/usbd_dfu_if.c **** 
+ 203:Src/usbd_dfu_if.c **** /**
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 5
+
+
+ 204:Src/usbd_dfu_if.c ****   * @brief  GetSector
+ 205:Src/usbd_dfu_if.c ****    *         Calc the address belone to witch sector.
+ 206:Src/usbd_dfu_if.c ****   * @param  the address
+ 207:Src/usbd_dfu_if.c ****   * @retval sector number.
+ 208:Src/usbd_dfu_if.c ****   */
+ 209:Src/usbd_dfu_if.c **** static uint32_t GetSector(uint32_t Address)
+ 210:Src/usbd_dfu_if.c **** {
+  27              		.loc 1 210 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+ 211:Src/usbd_dfu_if.c ****   uint32_t sector = 0;
+ 212:Src/usbd_dfu_if.c **** 
+ 213:Src/usbd_dfu_if.c ****   if ((Address < ADDR_FLASH_SECTOR_1) && (Address >= ADDR_FLASH_SECTOR_0))
+  33              		.loc 1 213 0
+  34 0000 00F17843 		add	r3, r0, #-134217728
+  35 0004 B3F5804F 		cmp	r3, #16384
+  36 0008 C0F09A80 		bcc	.L3
+ 214:Src/usbd_dfu_if.c ****   {
+ 215:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_0;
+ 216:Src/usbd_dfu_if.c ****   }
+ 217:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_2) && (Address >= ADDR_FLASH_SECTOR_1))
+  37              		.loc 1 217 0
+  38 000c A3F58043 		sub	r3, r3, #16384
+  39 0010 B3F5804F 		cmp	r3, #16384
+  40 0014 C0F09680 		bcc	.L4
+ 218:Src/usbd_dfu_if.c ****   {
+ 219:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_1;
+ 220:Src/usbd_dfu_if.c ****   }
+ 221:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_3) && (Address >= ADDR_FLASH_SECTOR_2))
+  41              		.loc 1 221 0
+  42 0018 00F17843 		add	r3, r0, #-134217728
+  43 001c A3F50043 		sub	r3, r3, #32768
+  44 0020 B3F5804F 		cmp	r3, #16384
+  45 0024 C0F09080 		bcc	.L5
+ 222:Src/usbd_dfu_if.c ****   {
+ 223:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_2;
+ 224:Src/usbd_dfu_if.c ****   }
+ 225:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_4) && (Address >= ADDR_FLASH_SECTOR_3))
+  46              		.loc 1 225 0
+  47 0028 00F17843 		add	r3, r0, #-134217728
+  48 002c A3F54043 		sub	r3, r3, #49152
+  49 0030 B3F5804F 		cmp	r3, #16384
+  50 0034 C0F08A80 		bcc	.L6
+ 226:Src/usbd_dfu_if.c ****   {
+ 227:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_3;
+ 228:Src/usbd_dfu_if.c ****   }
+ 229:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_5) && (Address >= ADDR_FLASH_SECTOR_4))
+  51              		.loc 1 229 0
+  52 0038 00F17743 		add	r3, r0, #-150994944
+  53 003c 03F57F03 		add	r3, r3, #16711680
+  54 0040 B3F5803F 		cmp	r3, #65536
+  55 0044 C0F08480 		bcc	.L7
+ 230:Src/usbd_dfu_if.c ****   {
+ 231:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_4;
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 6
+
+
+ 232:Src/usbd_dfu_if.c ****   }
+ 233:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_6) && (Address >= ADDR_FLASH_SECTOR_5))
+  56              		.loc 1 233 0
+  57 0048 00F17743 		add	r3, r0, #-150994944
+  58 004c 03F57E03 		add	r3, r3, #16646144
+  59 0050 B3F5003F 		cmp	r3, #131072
+  60 0054 7ED3     		bcc	.L8
+ 234:Src/usbd_dfu_if.c ****   {
+ 235:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_5;
+ 236:Src/usbd_dfu_if.c ****   }
+ 237:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_7) && (Address >= ADDR_FLASH_SECTOR_6))
+  61              		.loc 1 237 0
+  62 0056 00F17743 		add	r3, r0, #-150994944
+  63 005a 03F57C03 		add	r3, r3, #16515072
+  64 005e B3F5003F 		cmp	r3, #131072
+  65 0062 79D3     		bcc	.L9
+ 238:Src/usbd_dfu_if.c ****   {
+ 239:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_6;
+ 240:Src/usbd_dfu_if.c ****   }
+ 241:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_8) && (Address >= ADDR_FLASH_SECTOR_7))
+  66              		.loc 1 241 0
+  67 0064 00F17743 		add	r3, r0, #-150994944
+  68 0068 03F57A03 		add	r3, r3, #16384000
+  69 006c B3F5003F 		cmp	r3, #131072
+  70 0070 74D3     		bcc	.L10
+ 242:Src/usbd_dfu_if.c ****   {
+ 243:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_7;
+ 244:Src/usbd_dfu_if.c ****   }
+ 245:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_9) && (Address >= ADDR_FLASH_SECTOR_8))
+  71              		.loc 1 245 0
+  72 0072 00F17743 		add	r3, r0, #-150994944
+  73 0076 03F57803 		add	r3, r3, #16252928
+  74 007a B3F5003F 		cmp	r3, #131072
+  75 007e 6FD3     		bcc	.L11
+ 246:Src/usbd_dfu_if.c ****   {
+ 247:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_8;
+ 248:Src/usbd_dfu_if.c ****   }
+ 249:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_10) && (Address >= ADDR_FLASH_SECTOR_9))
+  76              		.loc 1 249 0
+  77 0080 00F17743 		add	r3, r0, #-150994944
+  78 0084 03F57603 		add	r3, r3, #16121856
+  79 0088 B3F5003F 		cmp	r3, #131072
+  80 008c 6AD3     		bcc	.L12
+ 250:Src/usbd_dfu_if.c ****   {
+ 251:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_9;
+ 252:Src/usbd_dfu_if.c ****   }
+ 253:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_11) && (Address >= ADDR_FLASH_SECTOR_10))
+  81              		.loc 1 253 0
+  82 008e 00F17743 		add	r3, r0, #-150994944
+  83 0092 03F57403 		add	r3, r3, #15990784
+  84 0096 B3F5003F 		cmp	r3, #131072
+  85 009a 65D3     		bcc	.L13
+ 254:Src/usbd_dfu_if.c ****   {
+ 255:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_10;
+ 256:Src/usbd_dfu_if.c ****   }
+ 257:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_12) && (Address >= ADDR_FLASH_SECTOR_11))
+  86              		.loc 1 257 0
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 7
+
+
+  87 009c 00F17743 		add	r3, r0, #-150994944
+  88 00a0 03F57203 		add	r3, r3, #15859712
+  89 00a4 B3F5003F 		cmp	r3, #131072
+  90 00a8 60D3     		bcc	.L14
+ 258:Src/usbd_dfu_if.c ****   {
+ 259:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_11;
+ 260:Src/usbd_dfu_if.c ****   }
+ 261:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_13) && (Address >= ADDR_FLASH_SECTOR_12))
+  91              		.loc 1 261 0
+  92 00aa A0F10163 		sub	r3, r0, #135266304
+  93 00ae B3F5804F 		cmp	r3, #16384
+  94 00b2 5DD3     		bcc	.L15
+ 262:Src/usbd_dfu_if.c ****   {
+ 263:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_12;
+ 264:Src/usbd_dfu_if.c ****   }
+ 265:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_14) && (Address >= ADDR_FLASH_SECTOR_13))
+  95              		.loc 1 265 0
+  96 00b4 A3F58043 		sub	r3, r3, #16384
+  97 00b8 B3F5804F 		cmp	r3, #16384
+  98 00bc 5AD3     		bcc	.L16
+ 266:Src/usbd_dfu_if.c ****   {
+ 267:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_13;
+ 268:Src/usbd_dfu_if.c ****   }
+ 269:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_15) && (Address >= ADDR_FLASH_SECTOR_14))
+  99              		.loc 1 269 0
+ 100 00be A0F10163 		sub	r3, r0, #135266304
+ 101 00c2 A3F50043 		sub	r3, r3, #32768
+ 102 00c6 B3F5804F 		cmp	r3, #16384
+ 103 00ca 55D3     		bcc	.L17
+ 270:Src/usbd_dfu_if.c ****   {
+ 271:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_14;
+ 272:Src/usbd_dfu_if.c ****   }
+ 273:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_16) && (Address >= ADDR_FLASH_SECTOR_15))
+ 104              		.loc 1 273 0
+ 105 00cc A0F10163 		sub	r3, r0, #135266304
+ 106 00d0 A3F54043 		sub	r3, r3, #49152
+ 107 00d4 B3F5804F 		cmp	r3, #16384
+ 108 00d8 50D3     		bcc	.L18
+ 274:Src/usbd_dfu_if.c ****   {
+ 275:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_15;
+ 276:Src/usbd_dfu_if.c ****   }
+ 277:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_17) && (Address >= ADDR_FLASH_SECTOR_16))
+ 109              		.loc 1 277 0
+ 110 00da 00F17743 		add	r3, r0, #-150994944
+ 111 00de 03F56F03 		add	r3, r3, #15663104
+ 112 00e2 B3F5803F 		cmp	r3, #65536
+ 113 00e6 4BD3     		bcc	.L19
+ 278:Src/usbd_dfu_if.c ****   {
+ 279:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_16;
+ 280:Src/usbd_dfu_if.c ****   }
+ 281:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_18) && (Address >= ADDR_FLASH_SECTOR_17))
+ 114              		.loc 1 281 0
+ 115 00e8 00F17743 		add	r3, r0, #-150994944
+ 116 00ec 03F56E03 		add	r3, r3, #15597568
+ 117 00f0 B3F5003F 		cmp	r3, #131072
+ 118 00f4 46D3     		bcc	.L20
+ 282:Src/usbd_dfu_if.c ****   {
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 8
+
+
+ 283:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_17;
+ 284:Src/usbd_dfu_if.c ****   }
+ 285:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_19) && (Address >= ADDR_FLASH_SECTOR_18))
+ 119              		.loc 1 285 0
+ 120 00f6 00F17743 		add	r3, r0, #-150994944
+ 121 00fa 03F56C03 		add	r3, r3, #15466496
+ 122 00fe B3F5003F 		cmp	r3, #131072
+ 123 0102 41D3     		bcc	.L21
+ 286:Src/usbd_dfu_if.c ****   {
+ 287:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_18;
+ 288:Src/usbd_dfu_if.c ****   }
+ 289:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_20) && (Address >= ADDR_FLASH_SECTOR_19))
+ 124              		.loc 1 289 0
+ 125 0104 00F17743 		add	r3, r0, #-150994944
+ 126 0108 03F56A03 		add	r3, r3, #15335424
+ 127 010c B3F5003F 		cmp	r3, #131072
+ 128 0110 3CD3     		bcc	.L22
+ 290:Src/usbd_dfu_if.c ****   {
+ 291:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_19;
+ 292:Src/usbd_dfu_if.c ****   }
+ 293:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_21) && (Address >= ADDR_FLASH_SECTOR_20))
+ 129              		.loc 1 293 0
+ 130 0112 00F17743 		add	r3, r0, #-150994944
+ 131 0116 03F56803 		add	r3, r3, #15204352
+ 132 011a B3F5003F 		cmp	r3, #131072
+ 133 011e 37D3     		bcc	.L23
+ 294:Src/usbd_dfu_if.c ****   {
+ 295:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_20;
+ 296:Src/usbd_dfu_if.c ****   }
+ 297:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_22) && (Address >= ADDR_FLASH_SECTOR_21))
+ 134              		.loc 1 297 0
+ 135 0120 00F17743 		add	r3, r0, #-150994944
+ 136 0124 03F56603 		add	r3, r3, #15073280
+ 137 0128 B3F5003F 		cmp	r3, #131072
+ 138 012c 32D3     		bcc	.L24
+ 298:Src/usbd_dfu_if.c ****   {
+ 299:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_21;
+ 300:Src/usbd_dfu_if.c ****   }
+ 301:Src/usbd_dfu_if.c ****   else if ((Address < ADDR_FLASH_SECTOR_23) && (Address >= ADDR_FLASH_SECTOR_22))
+ 139              		.loc 1 301 0
+ 140 012e 00F17740 		add	r0, r0, #-150994944
+ 141              	.LVL1:
+ 142 0132 00F56400 		add	r0, r0, #14942208
+ 143              	.LVL2:
+ 144 0136 B0F5003F 		cmp	r0, #131072
+ 145 013a 2DD2     		bcs	.L25
+ 302:Src/usbd_dfu_if.c ****   {
+ 303:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_22;
+ 146              		.loc 1 303 0
+ 147 013c 1620     		movs	r0, #22
+ 148              	.LVL3:
+ 149 013e 7047     		bx	lr
+ 150              	.LVL4:
+ 151              	.L3:
+ 215:Src/usbd_dfu_if.c ****   }
+ 152              		.loc 1 215 0
+ 153 0140 0020     		movs	r0, #0
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 9
+
+
+ 154              	.LVL5:
+ 155 0142 7047     		bx	lr
+ 156              	.LVL6:
+ 157              	.L4:
+ 219:Src/usbd_dfu_if.c ****   }
+ 158              		.loc 1 219 0
+ 159 0144 0120     		movs	r0, #1
+ 160              	.LVL7:
+ 161 0146 7047     		bx	lr
+ 162              	.LVL8:
+ 163              	.L5:
+ 223:Src/usbd_dfu_if.c ****   }
+ 164              		.loc 1 223 0
+ 165 0148 0220     		movs	r0, #2
+ 166              	.LVL9:
+ 167 014a 7047     		bx	lr
+ 168              	.LVL10:
+ 169              	.L6:
+ 227:Src/usbd_dfu_if.c ****   }
+ 170              		.loc 1 227 0
+ 171 014c 0320     		movs	r0, #3
+ 172              	.LVL11:
+ 173 014e 7047     		bx	lr
+ 174              	.LVL12:
+ 175              	.L7:
+ 231:Src/usbd_dfu_if.c ****   }
+ 176              		.loc 1 231 0
+ 177 0150 0420     		movs	r0, #4
+ 178              	.LVL13:
+ 179 0152 7047     		bx	lr
+ 180              	.LVL14:
+ 181              	.L8:
+ 235:Src/usbd_dfu_if.c ****   }
+ 182              		.loc 1 235 0
+ 183 0154 0520     		movs	r0, #5
+ 184              	.LVL15:
+ 185 0156 7047     		bx	lr
+ 186              	.LVL16:
+ 187              	.L9:
+ 239:Src/usbd_dfu_if.c ****   }
+ 188              		.loc 1 239 0
+ 189 0158 0620     		movs	r0, #6
+ 190              	.LVL17:
+ 191 015a 7047     		bx	lr
+ 192              	.LVL18:
+ 193              	.L10:
+ 243:Src/usbd_dfu_if.c ****   }
+ 194              		.loc 1 243 0
+ 195 015c 0720     		movs	r0, #7
+ 196              	.LVL19:
+ 197 015e 7047     		bx	lr
+ 198              	.LVL20:
+ 199              	.L11:
+ 247:Src/usbd_dfu_if.c ****   }
+ 200              		.loc 1 247 0
+ 201 0160 0820     		movs	r0, #8
+ 202              	.LVL21:
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 10
+
+
+ 203 0162 7047     		bx	lr
+ 204              	.LVL22:
+ 205              	.L12:
+ 251:Src/usbd_dfu_if.c ****   }
+ 206              		.loc 1 251 0
+ 207 0164 0920     		movs	r0, #9
+ 208              	.LVL23:
+ 209 0166 7047     		bx	lr
+ 210              	.LVL24:
+ 211              	.L13:
+ 255:Src/usbd_dfu_if.c ****   }
+ 212              		.loc 1 255 0
+ 213 0168 0A20     		movs	r0, #10
+ 214              	.LVL25:
+ 215 016a 7047     		bx	lr
+ 216              	.LVL26:
+ 217              	.L14:
+ 259:Src/usbd_dfu_if.c ****   }
+ 218              		.loc 1 259 0
+ 219 016c 0B20     		movs	r0, #11
+ 220              	.LVL27:
+ 221 016e 7047     		bx	lr
+ 222              	.LVL28:
+ 223              	.L15:
+ 263:Src/usbd_dfu_if.c ****   }
+ 224              		.loc 1 263 0
+ 225 0170 0C20     		movs	r0, #12
+ 226              	.LVL29:
+ 227 0172 7047     		bx	lr
+ 228              	.LVL30:
+ 229              	.L16:
+ 267:Src/usbd_dfu_if.c ****   }
+ 230              		.loc 1 267 0
+ 231 0174 0D20     		movs	r0, #13
+ 232              	.LVL31:
+ 233 0176 7047     		bx	lr
+ 234              	.LVL32:
+ 235              	.L17:
+ 271:Src/usbd_dfu_if.c ****   }
+ 236              		.loc 1 271 0
+ 237 0178 0E20     		movs	r0, #14
+ 238              	.LVL33:
+ 239 017a 7047     		bx	lr
+ 240              	.LVL34:
+ 241              	.L18:
+ 275:Src/usbd_dfu_if.c ****   }
+ 242              		.loc 1 275 0
+ 243 017c 0F20     		movs	r0, #15
+ 244              	.LVL35:
+ 245 017e 7047     		bx	lr
+ 246              	.LVL36:
+ 247              	.L19:
+ 279:Src/usbd_dfu_if.c ****   }
+ 248              		.loc 1 279 0
+ 249 0180 1020     		movs	r0, #16
+ 250              	.LVL37:
+ 251 0182 7047     		bx	lr
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 11
+
+
+ 252              	.LVL38:
+ 253              	.L20:
+ 283:Src/usbd_dfu_if.c ****   }
+ 254              		.loc 1 283 0
+ 255 0184 1120     		movs	r0, #17
+ 256              	.LVL39:
+ 257 0186 7047     		bx	lr
+ 258              	.LVL40:
+ 259              	.L21:
+ 287:Src/usbd_dfu_if.c ****   }
+ 260              		.loc 1 287 0
+ 261 0188 1220     		movs	r0, #18
+ 262              	.LVL41:
+ 263 018a 7047     		bx	lr
+ 264              	.LVL42:
+ 265              	.L22:
+ 291:Src/usbd_dfu_if.c ****   }
+ 266              		.loc 1 291 0
+ 267 018c 1320     		movs	r0, #19
+ 268              	.LVL43:
+ 269 018e 7047     		bx	lr
+ 270              	.LVL44:
+ 271              	.L23:
+ 295:Src/usbd_dfu_if.c ****   }
+ 272              		.loc 1 295 0
+ 273 0190 1420     		movs	r0, #20
+ 274              	.LVL45:
+ 275 0192 7047     		bx	lr
+ 276              	.LVL46:
+ 277              	.L24:
+ 299:Src/usbd_dfu_if.c ****   }
+ 278              		.loc 1 299 0
+ 279 0194 1520     		movs	r0, #21
+ 280              	.LVL47:
+ 281 0196 7047     		bx	lr
+ 282              	.L25:
+ 304:Src/usbd_dfu_if.c ****   }
+ 305:Src/usbd_dfu_if.c ****   else
+ 306:Src/usbd_dfu_if.c ****   {
+ 307:Src/usbd_dfu_if.c ****     sector = FLASH_SECTOR_23;
+ 283              		.loc 1 307 0
+ 284 0198 1720     		movs	r0, #23
+ 285              	.LVL48:
+ 308:Src/usbd_dfu_if.c ****   }
+ 309:Src/usbd_dfu_if.c ****   return sector;
+ 310:Src/usbd_dfu_if.c **** }
+ 286              		.loc 1 310 0
+ 287 019a 7047     		bx	lr
+ 288              		.cfi_endproc
+ 289              	.LFE128:
+ 291              		.section	.text.MEM_If_Read_HS,"ax",%progbits
+ 292              		.align	1
+ 293              		.syntax unified
+ 294              		.thumb
+ 295              		.thumb_func
+ 296              		.fpu fpv4-sp-d16
+ 298              	MEM_If_Read_HS:
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 12
+
+
+ 299              	.LFB131:
+ 311:Src/usbd_dfu_if.c **** 
+ 312:Src/usbd_dfu_if.c **** /**
+ 313:Src/usbd_dfu_if.c ****   * @brief  MEM_If_Erase_HS
+ 314:Src/usbd_dfu_if.c ****   *         Erase sector.
+ 315:Src/usbd_dfu_if.c ****   * @param  Add: Address of sector to be erased.
+ 316:Src/usbd_dfu_if.c ****   * @retval 0 if operation is successful, MAL_FAIL else.
+ 317:Src/usbd_dfu_if.c ****   */
+ 318:Src/usbd_dfu_if.c **** uint16_t MEM_If_Erase_HS(uint32_t Add)
+ 319:Src/usbd_dfu_if.c **** {
+ 320:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 8 */
+ 321:Src/usbd_dfu_if.c ****   uint32_t startsector = 0;
+ 322:Src/usbd_dfu_if.c ****   uint32_t sectornb = 0;
+ 323:Src/usbd_dfu_if.c ****   /* Variable contains Flash operation status */
+ 324:Src/usbd_dfu_if.c ****   HAL_StatusTypeDef status;
+ 325:Src/usbd_dfu_if.c ****   FLASH_EraseInitTypeDef eraseinitstruct;
+ 326:Src/usbd_dfu_if.c **** 
+ 327:Src/usbd_dfu_if.c ****   /* Get the number of sector */
+ 328:Src/usbd_dfu_if.c ****   startsector = GetSector(Add);
+ 329:Src/usbd_dfu_if.c **** 
+ 330:Src/usbd_dfu_if.c ****   eraseinitstruct.TypeErase = FLASH_TYPEERASE_SECTORS;
+ 331:Src/usbd_dfu_if.c ****   eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
+ 332:Src/usbd_dfu_if.c ****   eraseinitstruct.Sector = startsector;
+ 333:Src/usbd_dfu_if.c ****   eraseinitstruct.NbSectors = 1;
+ 334:Src/usbd_dfu_if.c ****   status = HAL_FLASHEx_Erase(&eraseinitstruct, &sectornb);
+ 335:Src/usbd_dfu_if.c **** 
+ 336:Src/usbd_dfu_if.c ****   if (status != HAL_OK)
+ 337:Src/usbd_dfu_if.c ****   {
+ 338:Src/usbd_dfu_if.c ****     return (USBD_FAIL);
+ 339:Src/usbd_dfu_if.c ****   }
+ 340:Src/usbd_dfu_if.c ****   return (USBD_OK);
+ 341:Src/usbd_dfu_if.c ****   /* USER CODE END 8 */
+ 342:Src/usbd_dfu_if.c **** }
+ 343:Src/usbd_dfu_if.c **** 
+ 344:Src/usbd_dfu_if.c **** /**
+ 345:Src/usbd_dfu_if.c ****   * @brief  MEM_If_Write_HS
+ 346:Src/usbd_dfu_if.c ****   *         Memory write routine.
+ 347:Src/usbd_dfu_if.c ****   * @param  src: Pointer to the source buffer. Address to be written to.
+ 348:Src/usbd_dfu_if.c ****   * @param  dest: Pointer to the destination buffer.
+ 349:Src/usbd_dfu_if.c ****   * @param  Len: Number of data to be written (in bytes).
+ 350:Src/usbd_dfu_if.c ****   * @retval 0 if operation is successful, MAL_FAIL else.
+ 351:Src/usbd_dfu_if.c ****   */
+ 352:Src/usbd_dfu_if.c **** uint16_t MEM_If_Write_HS(uint8_t *src, uint8_t *dest, uint32_t Len)
+ 353:Src/usbd_dfu_if.c **** {
+ 354:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 9 */
+ 355:Src/usbd_dfu_if.c ****   uint32_t i = 0;
+ 356:Src/usbd_dfu_if.c **** 
+ 357:Src/usbd_dfu_if.c ****   for (i = 0; i < Len; i += 4)
+ 358:Src/usbd_dfu_if.c ****   {
+ 359:Src/usbd_dfu_if.c ****     /* Device voltage range supposed to be [2.7V to 3.6V], the operation will
+ 360:Src/usbd_dfu_if.c ****        be done by byte */
+ 361:Src/usbd_dfu_if.c ****     if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, (uint32_t)(dest + i), *(uint32_t *)(src + i)) == 
+ 362:Src/usbd_dfu_if.c ****     {
+ 363:Src/usbd_dfu_if.c ****       /* Check the written value */
+ 364:Src/usbd_dfu_if.c ****       if (*(uint32_t *)(src + i) != *(uint32_t *)(dest + i))
+ 365:Src/usbd_dfu_if.c ****       {
+ 366:Src/usbd_dfu_if.c ****         /* Flash content doesn't match SRAM content */
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 13
+
+
+ 367:Src/usbd_dfu_if.c ****         return (USBD_FAIL);
+ 368:Src/usbd_dfu_if.c ****       }
+ 369:Src/usbd_dfu_if.c ****     }
+ 370:Src/usbd_dfu_if.c ****     else
+ 371:Src/usbd_dfu_if.c ****     {
+ 372:Src/usbd_dfu_if.c ****       /* Error occurred while writing data in Flash memory */
+ 373:Src/usbd_dfu_if.c ****       return (USBD_FAIL);
+ 374:Src/usbd_dfu_if.c ****     }
+ 375:Src/usbd_dfu_if.c ****   }
+ 376:Src/usbd_dfu_if.c ****   return (USBD_OK);
+ 377:Src/usbd_dfu_if.c ****   /* USER CODE END 9 */
+ 378:Src/usbd_dfu_if.c **** }
+ 379:Src/usbd_dfu_if.c **** 
+ 380:Src/usbd_dfu_if.c **** /**
+ 381:Src/usbd_dfu_if.c ****   * @brief  MEM_If_Read_HS
+ 382:Src/usbd_dfu_if.c ****   *         Memory read routine.
+ 383:Src/usbd_dfu_if.c ****   * @param  src: Pointer to the source buffer. Address to be written to.
+ 384:Src/usbd_dfu_if.c ****   * @param  dest: Pointer to the destination buffer.
+ 385:Src/usbd_dfu_if.c ****   * @param  Len: Number of data to be read (in bytes).
+ 386:Src/usbd_dfu_if.c ****   * @retval Pointer to the physical address where data should be read.
+ 387:Src/usbd_dfu_if.c ****   */
+ 388:Src/usbd_dfu_if.c **** uint8_t *MEM_If_Read_HS(uint8_t *src, uint8_t *dest, uint32_t Len)
+ 389:Src/usbd_dfu_if.c **** {
+ 300              		.loc 1 389 0
+ 301              		.cfi_startproc
+ 302              		@ args = 0, pretend = 0, frame = 0
+ 303              		@ frame_needed = 0, uses_anonymous_args = 0
+ 304              		@ link register save eliminated.
+ 305              	.LVL49:
+ 390:Src/usbd_dfu_if.c ****   /* Return a valid address to avoid HardFault */
+ 391:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 10 */
+ 392:Src/usbd_dfu_if.c ****   uint32_t i = 0;
+ 393:Src/usbd_dfu_if.c ****   uint8_t *psrc = src;
+ 394:Src/usbd_dfu_if.c **** 
+ 395:Src/usbd_dfu_if.c ****   for (i = 0; i < Len; i++)
+ 306              		.loc 1 395 0
+ 307 0000 0023     		movs	r3, #0
+ 308              	.LVL50:
+ 309 0002 9342     		cmp	r3, r2
+ 310 0004 0AD2     		bcs	.L33
+ 389:Src/usbd_dfu_if.c ****   /* Return a valid address to avoid HardFault */
+ 311              		.loc 1 389 0
+ 312 0006 10B4     		push	{r4}
+ 313              	.LCFI0:
+ 314              		.cfi_def_cfa_offset 4
+ 315              		.cfi_offset 4, -4
+ 316              	.LVL51:
+ 317              	.L28:
+ 396:Src/usbd_dfu_if.c ****   {
+ 397:Src/usbd_dfu_if.c ****     dest[i] = *psrc++;
+ 318              		.loc 1 397 0 discriminator 3
+ 319 0008 0478     		ldrb	r4, [r0]	@ zero_extendqisi2
+ 320 000a CC54     		strb	r4, [r1, r3]
+ 395:Src/usbd_dfu_if.c ****   {
+ 321              		.loc 1 395 0 discriminator 3
+ 322 000c 0133     		adds	r3, r3, #1
+ 323              	.LVL52:
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 14
+
+
+ 324              		.loc 1 397 0 discriminator 3
+ 325 000e 0130     		adds	r0, r0, #1
+ 326              	.LVL53:
+ 395:Src/usbd_dfu_if.c ****   {
+ 327              		.loc 1 395 0 discriminator 3
+ 328 0010 9342     		cmp	r3, r2
+ 329 0012 F9D3     		bcc	.L28
+ 398:Src/usbd_dfu_if.c ****   }
+ 399:Src/usbd_dfu_if.c ****   /* Return a valid address to avoid HardFault */
+ 400:Src/usbd_dfu_if.c ****   return (uint8_t *)(dest);
+ 401:Src/usbd_dfu_if.c ****   /* USER CODE END 10 */
+ 402:Src/usbd_dfu_if.c **** }
+ 330              		.loc 1 402 0
+ 331 0014 0846     		mov	r0, r1
+ 332              	.LVL54:
+ 333 0016 5DF8044B 		ldr	r4, [sp], #4
+ 334              	.LCFI1:
+ 335              		.cfi_restore 4
+ 336              		.cfi_def_cfa_offset 0
+ 337 001a 7047     		bx	lr
+ 338              	.LVL55:
+ 339              	.L33:
+ 340 001c 0846     		mov	r0, r1
+ 341              	.LVL56:
+ 342 001e 7047     		bx	lr
+ 343              		.cfi_endproc
+ 344              	.LFE131:
+ 346              		.section	.text.MEM_If_GetStatus_HS,"ax",%progbits
+ 347              		.align	1
+ 348              		.syntax unified
+ 349              		.thumb
+ 350              		.thumb_func
+ 351              		.fpu fpv4-sp-d16
+ 353              	MEM_If_GetStatus_HS:
+ 354              	.LFB132:
+ 403:Src/usbd_dfu_if.c **** 
+ 404:Src/usbd_dfu_if.c **** /**
+ 405:Src/usbd_dfu_if.c ****   * @brief  Flash_If_GetStatus_HS
+ 406:Src/usbd_dfu_if.c ****   *         Get status routine.
+ 407:Src/usbd_dfu_if.c ****   * @param  Add: Address to be read from.
+ 408:Src/usbd_dfu_if.c ****   * @param  Cmd: Number of data to be read (in bytes).
+ 409:Src/usbd_dfu_if.c ****   * @param  buffer: used for returning the time necessary for a program or an erase operation
+ 410:Src/usbd_dfu_if.c ****   * @retval 0 if operation is successful
+ 411:Src/usbd_dfu_if.c ****   */
+ 412:Src/usbd_dfu_if.c **** uint16_t MEM_If_GetStatus_HS(uint32_t Add, uint8_t Cmd, uint8_t *buffer)
+ 413:Src/usbd_dfu_if.c **** {
+ 355              		.loc 1 413 0
+ 356              		.cfi_startproc
+ 357              		@ args = 0, pretend = 0, frame = 0
+ 358              		@ frame_needed = 0, uses_anonymous_args = 0
+ 359              	.LVL57:
+ 360 0000 38B5     		push	{r3, r4, r5, lr}
+ 361              	.LCFI2:
+ 362              		.cfi_def_cfa_offset 16
+ 363              		.cfi_offset 3, -16
+ 364              		.cfi_offset 4, -12
+ 365              		.cfi_offset 5, -8
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 15
+
+
+ 366              		.cfi_offset 14, -4
+ 367 0002 0D46     		mov	r5, r1
+ 368 0004 1446     		mov	r4, r2
+ 414:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 11 */
+ 415:Src/usbd_dfu_if.c ****   uint16_t time;
+ 416:Src/usbd_dfu_if.c **** 
+ 417:Src/usbd_dfu_if.c ****   time = TimingTable[GetSector(Add)];
+ 369              		.loc 1 417 0
+ 370 0006 FFF7FEFF 		bl	GetSector
+ 371              	.LVL58:
+ 372 000a 084B     		ldr	r3, .L41
+ 373 000c 33F81030 		ldrh	r3, [r3, r0, lsl #1]
+ 374              	.LVL59:
+ 418:Src/usbd_dfu_if.c **** 
+ 419:Src/usbd_dfu_if.c ****   switch (Cmd)
+ 375              		.loc 1 419 0
+ 376 0010 012D     		cmp	r5, #1
+ 377 0012 05D0     		beq	.L40
+ 420:Src/usbd_dfu_if.c ****   {
+ 421:Src/usbd_dfu_if.c ****   case DFU_MEDIA_PROGRAM:
+ 422:Src/usbd_dfu_if.c ****     buffer[1] = (uint8_t)time;
+ 423:Src/usbd_dfu_if.c ****     buffer[2] = (uint8_t)(time << 8);
+ 424:Src/usbd_dfu_if.c ****     buffer[3] = 0;
+ 425:Src/usbd_dfu_if.c ****     break;
+ 426:Src/usbd_dfu_if.c **** 
+ 427:Src/usbd_dfu_if.c ****   case DFU_MEDIA_ERASE:
+ 428:Src/usbd_dfu_if.c ****   default:
+ 429:Src/usbd_dfu_if.c ****     buffer[1] = (uint8_t)time;
+ 378              		.loc 1 429 0
+ 379 0014 6370     		strb	r3, [r4, #1]
+ 430:Src/usbd_dfu_if.c ****     buffer[2] = (uint8_t)(time << 8);
+ 380              		.loc 1 430 0
+ 381 0016 0023     		movs	r3, #0
+ 382              	.LVL60:
+ 383 0018 A370     		strb	r3, [r4, #2]
+ 431:Src/usbd_dfu_if.c ****     buffer[3] = 0;
+ 384              		.loc 1 431 0
+ 385 001a E370     		strb	r3, [r4, #3]
+ 386              	.L37:
+ 432:Src/usbd_dfu_if.c ****     break;
+ 433:Src/usbd_dfu_if.c ****   }
+ 434:Src/usbd_dfu_if.c ****   return (USBD_OK);
+ 435:Src/usbd_dfu_if.c ****   /* USER CODE END 11 */
+ 436:Src/usbd_dfu_if.c **** }
+ 387              		.loc 1 436 0
+ 388 001c 0020     		movs	r0, #0
+ 389              	.LVL61:
+ 390 001e 38BD     		pop	{r3, r4, r5, pc}
+ 391              	.LVL62:
+ 392              	.L40:
+ 422:Src/usbd_dfu_if.c ****     buffer[2] = (uint8_t)(time << 8);
+ 393              		.loc 1 422 0
+ 394 0020 6370     		strb	r3, [r4, #1]
+ 423:Src/usbd_dfu_if.c ****     buffer[3] = 0;
+ 395              		.loc 1 423 0
+ 396 0022 0023     		movs	r3, #0
+ 397              	.LVL63:
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 16
+
+
+ 398 0024 A370     		strb	r3, [r4, #2]
+ 424:Src/usbd_dfu_if.c ****     break;
+ 399              		.loc 1 424 0
+ 400 0026 E370     		strb	r3, [r4, #3]
+ 425:Src/usbd_dfu_if.c **** 
+ 401              		.loc 1 425 0
+ 402 0028 F8E7     		b	.L37
+ 403              	.L42:
+ 404 002a 00BF     		.align	2
+ 405              	.L41:
+ 406 002c 00000000 		.word	.LANCHOR0
+ 407              		.cfi_endproc
+ 408              	.LFE132:
+ 410              		.section	.text.MEM_If_Write_HS,"ax",%progbits
+ 411              		.align	1
+ 412              		.syntax unified
+ 413              		.thumb
+ 414              		.thumb_func
+ 415              		.fpu fpv4-sp-d16
+ 417              	MEM_If_Write_HS:
+ 418              	.LFB130:
+ 353:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 9 */
+ 419              		.loc 1 353 0
+ 420              		.cfi_startproc
+ 421              		@ args = 0, pretend = 0, frame = 0
+ 422              		@ frame_needed = 0, uses_anonymous_args = 0
+ 423              	.LVL64:
+ 424 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 425              	.LCFI3:
+ 426              		.cfi_def_cfa_offset 24
+ 427              		.cfi_offset 3, -24
+ 428              		.cfi_offset 4, -20
+ 429              		.cfi_offset 5, -16
+ 430              		.cfi_offset 6, -12
+ 431              		.cfi_offset 7, -8
+ 432              		.cfi_offset 14, -4
+ 433 0002 0646     		mov	r6, r0
+ 434 0004 0D46     		mov	r5, r1
+ 435 0006 1746     		mov	r7, r2
+ 436              	.LVL65:
+ 357:Src/usbd_dfu_if.c ****   {
+ 437              		.loc 1 357 0
+ 438 0008 0024     		movs	r4, #0
+ 439              	.LVL66:
+ 440              	.L44:
+ 357:Src/usbd_dfu_if.c ****   {
+ 441              		.loc 1 357 0 is_stmt 0 discriminator 1
+ 442 000a BC42     		cmp	r4, r7
+ 443 000c 0CD2     		bcs	.L50
+ 361:Src/usbd_dfu_if.c ****     {
+ 444              		.loc 1 361 0 is_stmt 1
+ 445 000e 3259     		ldr	r2, [r6, r4]
+ 446 0010 0023     		movs	r3, #0
+ 447 0012 2919     		adds	r1, r5, r4
+ 448 0014 0220     		movs	r0, #2
+ 449 0016 FFF7FEFF 		bl	HAL_FLASH_Program
+ 450              	.LVL67:
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 17
+
+
+ 451 001a 38B9     		cbnz	r0, .L47
+ 364:Src/usbd_dfu_if.c ****       {
+ 452              		.loc 1 364 0
+ 453 001c 3259     		ldr	r2, [r6, r4]
+ 454 001e 2B59     		ldr	r3, [r5, r4]
+ 455 0020 9A42     		cmp	r2, r3
+ 456 0022 05D1     		bne	.L48
+ 357:Src/usbd_dfu_if.c ****   {
+ 457              		.loc 1 357 0 discriminator 2
+ 458 0024 0434     		adds	r4, r4, #4
+ 459              	.LVL68:
+ 460 0026 F0E7     		b	.L44
+ 461              	.L50:
+ 376:Src/usbd_dfu_if.c ****   /* USER CODE END 9 */
+ 462              		.loc 1 376 0
+ 463 0028 0020     		movs	r0, #0
+ 464              	.L45:
+ 378:Src/usbd_dfu_if.c **** 
+ 465              		.loc 1 378 0
+ 466 002a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 467              	.LVL69:
+ 468              	.L47:
+ 373:Src/usbd_dfu_if.c ****     }
+ 469              		.loc 1 373 0
+ 470 002c 0220     		movs	r0, #2
+ 471 002e FCE7     		b	.L45
+ 472              	.L48:
+ 367:Src/usbd_dfu_if.c ****       }
+ 473              		.loc 1 367 0
+ 474 0030 0220     		movs	r0, #2
+ 475 0032 FAE7     		b	.L45
+ 476              		.cfi_endproc
+ 477              	.LFE130:
+ 479              		.section	.text.MEM_If_Erase_HS,"ax",%progbits
+ 480              		.align	1
+ 481              		.syntax unified
+ 482              		.thumb
+ 483              		.thumb_func
+ 484              		.fpu fpv4-sp-d16
+ 486              	MEM_If_Erase_HS:
+ 487              	.LFB129:
+ 319:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 8 */
+ 488              		.loc 1 319 0
+ 489              		.cfi_startproc
+ 490              		@ args = 0, pretend = 0, frame = 24
+ 491              		@ frame_needed = 0, uses_anonymous_args = 0
+ 492              	.LVL70:
+ 493 0000 10B5     		push	{r4, lr}
+ 494              	.LCFI4:
+ 495              		.cfi_def_cfa_offset 8
+ 496              		.cfi_offset 4, -8
+ 497              		.cfi_offset 14, -4
+ 498 0002 86B0     		sub	sp, sp, #24
+ 499              	.LCFI5:
+ 500              		.cfi_def_cfa_offset 32
+ 501              	.LVL71:
+ 322:Src/usbd_dfu_if.c ****   /* Variable contains Flash operation status */
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 18
+
+
+ 502              		.loc 1 322 0
+ 503 0004 0024     		movs	r4, #0
+ 504 0006 0594     		str	r4, [sp, #20]
+ 328:Src/usbd_dfu_if.c **** 
+ 505              		.loc 1 328 0
+ 506 0008 FFF7FEFF 		bl	GetSector
+ 507              	.LVL72:
+ 330:Src/usbd_dfu_if.c ****   eraseinitstruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
+ 508              		.loc 1 330 0
+ 509 000c 0094     		str	r4, [sp]
+ 331:Src/usbd_dfu_if.c ****   eraseinitstruct.Sector = startsector;
+ 510              		.loc 1 331 0
+ 511 000e 0223     		movs	r3, #2
+ 512 0010 0493     		str	r3, [sp, #16]
+ 332:Src/usbd_dfu_if.c ****   eraseinitstruct.NbSectors = 1;
+ 513              		.loc 1 332 0
+ 514 0012 0290     		str	r0, [sp, #8]
+ 333:Src/usbd_dfu_if.c ****   status = HAL_FLASHEx_Erase(&eraseinitstruct, &sectornb);
+ 515              		.loc 1 333 0
+ 516 0014 0123     		movs	r3, #1
+ 517 0016 0393     		str	r3, [sp, #12]
+ 334:Src/usbd_dfu_if.c **** 
+ 518              		.loc 1 334 0
+ 519 0018 05A9     		add	r1, sp, #20
+ 520 001a 6846     		mov	r0, sp
+ 521              	.LVL73:
+ 522 001c FFF7FEFF 		bl	HAL_FLASHEx_Erase
+ 523              	.LVL74:
+ 336:Src/usbd_dfu_if.c ****   {
+ 524              		.loc 1 336 0
+ 525 0020 10B9     		cbnz	r0, .L55
+ 340:Src/usbd_dfu_if.c ****   /* USER CODE END 8 */
+ 526              		.loc 1 340 0
+ 527 0022 0020     		movs	r0, #0
+ 528              	.LVL75:
+ 529              	.L52:
+ 342:Src/usbd_dfu_if.c **** 
+ 530              		.loc 1 342 0
+ 531 0024 06B0     		add	sp, sp, #24
+ 532              	.LCFI6:
+ 533              		.cfi_remember_state
+ 534              		.cfi_def_cfa_offset 8
+ 535              		@ sp needed
+ 536 0026 10BD     		pop	{r4, pc}
+ 537              	.LVL76:
+ 538              	.L55:
+ 539              	.LCFI7:
+ 540              		.cfi_restore_state
+ 338:Src/usbd_dfu_if.c ****   }
+ 541              		.loc 1 338 0
+ 542 0028 0220     		movs	r0, #2
+ 543              	.LVL77:
+ 544 002a FBE7     		b	.L52
+ 545              		.cfi_endproc
+ 546              	.LFE129:
+ 548              		.section	.text.MEM_If_DeInit_HS,"ax",%progbits
+ 549              		.align	1
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 19
+
+
+ 550              		.syntax unified
+ 551              		.thumb
+ 552              		.thumb_func
+ 553              		.fpu fpv4-sp-d16
+ 555              	MEM_If_DeInit_HS:
+ 556              	.LFB127:
+ 196:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 7 */
+ 557              		.loc 1 196 0
+ 558              		.cfi_startproc
+ 559              		@ args = 0, pretend = 0, frame = 0
+ 560              		@ frame_needed = 0, uses_anonymous_args = 0
+ 561 0000 08B5     		push	{r3, lr}
+ 562              	.LCFI8:
+ 563              		.cfi_def_cfa_offset 8
+ 564              		.cfi_offset 3, -8
+ 565              		.cfi_offset 14, -4
+ 198:Src/usbd_dfu_if.c ****   return (USBD_OK);
+ 566              		.loc 1 198 0
+ 567 0002 FFF7FEFF 		bl	HAL_FLASH_Lock
+ 568              	.LVL78:
+ 201:Src/usbd_dfu_if.c **** 
+ 569              		.loc 1 201 0
+ 570 0006 0020     		movs	r0, #0
+ 571 0008 08BD     		pop	{r3, pc}
+ 572              		.cfi_endproc
+ 573              	.LFE127:
+ 575              		.section	.text.MEM_If_Init_HS,"ax",%progbits
+ 576              		.align	1
+ 577              		.syntax unified
+ 578              		.thumb
+ 579              		.thumb_func
+ 580              		.fpu fpv4-sp-d16
+ 582              	MEM_If_Init_HS:
+ 583              	.LFB126:
+ 182:Src/usbd_dfu_if.c ****   /* USER CODE BEGIN 6 */
+ 584              		.loc 1 182 0
+ 585              		.cfi_startproc
+ 586              		@ args = 0, pretend = 0, frame = 0
+ 587              		@ frame_needed = 0, uses_anonymous_args = 0
+ 588 0000 08B5     		push	{r3, lr}
+ 589              	.LCFI9:
+ 590              		.cfi_def_cfa_offset 8
+ 591              		.cfi_offset 3, -8
+ 592              		.cfi_offset 14, -4
+ 184:Src/usbd_dfu_if.c ****   return (USBD_OK);
+ 593              		.loc 1 184 0
+ 594 0002 FFF7FEFF 		bl	HAL_FLASH_Unlock
+ 595              	.LVL79:
+ 187:Src/usbd_dfu_if.c **** 
+ 596              		.loc 1 187 0
+ 597 0006 0020     		movs	r0, #0
+ 598 0008 08BD     		pop	{r3, pc}
+ 599              		.cfi_endproc
+ 600              	.LFE126:
+ 602              		.global	USBD_DFU_fops_HS
+ 603              		.section	.data.USBD_DFU_fops_HS,"aw",%progbits
+ 604              		.align	2
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 20
+
+
+ 607              	USBD_DFU_fops_HS:
+ 608 0000 00000000 		.word	.LC0
+ 609 0004 00000000 		.word	MEM_If_Init_HS
+ 610 0008 00000000 		.word	MEM_If_DeInit_HS
+ 611 000c 00000000 		.word	MEM_If_Erase_HS
+ 612 0010 00000000 		.word	MEM_If_Write_HS
+ 613 0014 00000000 		.word	MEM_If_Read_HS
+ 614 0018 00000000 		.word	MEM_If_GetStatus_HS
+ 615              		.section	.rodata.TimingTable,"a",%progbits
+ 616              		.align	2
+ 617              		.set	.LANCHOR0,. + 0
+ 620              	TimingTable:
+ 621 0000 F401     		.short	500
+ 622 0002 F401     		.short	500
+ 623 0004 F401     		.short	500
+ 624 0006 F401     		.short	500
+ 625 0008 4C04     		.short	1100
+ 626 000a D007     		.short	2000
+ 627 000c D007     		.short	2000
+ 628 000e D007     		.short	2000
+ 629 0010 D007     		.short	2000
+ 630 0012 D007     		.short	2000
+ 631 0014 D007     		.short	2000
+ 632 0016 D007     		.short	2000
+ 633 0018 F401     		.short	500
+ 634 001a F401     		.short	500
+ 635 001c F401     		.short	500
+ 636 001e F401     		.short	500
+ 637 0020 4C04     		.short	1100
+ 638 0022 D007     		.short	2000
+ 639 0024 D007     		.short	2000
+ 640 0026 D007     		.short	2000
+ 641 0028 D007     		.short	2000
+ 642 002a D007     		.short	2000
+ 643 002c D007     		.short	2000
+ 644 002e D007     		.short	2000
+ 645              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 646              		.align	2
+ 647              	.LC0:
+ 648 0000 40496E74 		.ascii	"@Internal Flash   /0x08000000/03*016Ka,01*016Kg,01*"
+ 648      65726E61 
+ 648      6C20466C 
+ 648      61736820 
+ 648      20202F30 
+ 649 0033 3036344B 		.ascii	"064Kg,07*128Kg,04*016Kg,01*064Kg,07*128Kg\000"
+ 649      672C3037 
+ 649      2A313238 
+ 649      4B672C30 
+ 649      342A3031 
+ 650              		.text
+ 651              	.Letext0:
+ 652              		.file 2 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\machine\\_default_ty
+ 653              		.file 3 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\sys\\lock.h"
+ 654              		.file 4 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\sys\\_types.h"
+ 655              		.file 5 "d:\\gnu tools arm embedded\\7 2017-q4-major\\lib\\gcc\\arm-none-eabi\\7.2.1\\include\\std
+ 656              		.file 6 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\sys\\reent.h"
+ 657              		.file 7 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\sys\\_stdint.h"
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 21
+
+
+ 658              		.file 8 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\stdlib.h"
+ 659              		.file 9 "Drivers/CMSIS/Include/core_cm4.h"
+ 660              		.file 10 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 661              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 662              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h"
+ 663              		.file 13 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h"
+ 664              		.file 14 "Middlewares/ST/STM32_USB_Device_Library/Class/DFU/Inc/usbd_dfu.h"
+ 665              		.file 15 "Inc/usbd_dfu_if.h"
+ 666              		.file 16 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h"
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usbd_dfu_if.c
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:18     .text.GetSector:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:24     .text.GetSector:00000000 GetSector
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:292    .text.MEM_If_Read_HS:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:298    .text.MEM_If_Read_HS:00000000 MEM_If_Read_HS
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:347    .text.MEM_If_GetStatus_HS:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:353    .text.MEM_If_GetStatus_HS:00000000 MEM_If_GetStatus_HS
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:406    .text.MEM_If_GetStatus_HS:0000002c $d
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:411    .text.MEM_If_Write_HS:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:417    .text.MEM_If_Write_HS:00000000 MEM_If_Write_HS
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:480    .text.MEM_If_Erase_HS:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:486    .text.MEM_If_Erase_HS:00000000 MEM_If_Erase_HS
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:549    .text.MEM_If_DeInit_HS:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:555    .text.MEM_If_DeInit_HS:00000000 MEM_If_DeInit_HS
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:576    .text.MEM_If_Init_HS:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:582    .text.MEM_If_Init_HS:00000000 MEM_If_Init_HS
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:607    .data.USBD_DFU_fops_HS:00000000 USBD_DFU_fops_HS
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:604    .data.USBD_DFU_fops_HS:00000000 $d
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:616    .rodata.TimingTable:00000000 $d
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:620    .rodata.TimingTable:00000000 TimingTable
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccvFM92C.s:646    .rodata.str1.4:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_FLASH_Program
+HAL_FLASHEx_Erase
+HAL_FLASH_Lock
+HAL_FLASH_Unlock

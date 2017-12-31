@@ -1,0 +1,1751 @@
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MX_GPIO_Init,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu fpv4-sp-d16
+  24              	MX_GPIO_Init:
+  25              	.LFB128:
+  26              		.file 1 "Src/main.c"
+   1:Src/main.c    **** /**
+   2:Src/main.c    ****   ******************************************************************************
+   3:Src/main.c    ****   * File Name          : main.c
+   4:Src/main.c    ****   * Description        : Main program body
+   5:Src/main.c    ****   ******************************************************************************
+   6:Src/main.c    ****   * This notice applies to any and all portions of this file
+   7:Src/main.c    ****   * that are not between comment pairs USER CODE BEGIN and
+   8:Src/main.c    ****   * USER CODE END. Other portions of this file, whether 
+   9:Src/main.c    ****   * inserted by the user or by software development tools
+  10:Src/main.c    ****   * are owned by their respective copyright owners.
+  11:Src/main.c    ****   *
+  12:Src/main.c    ****   * Copyright (c) 2017 STMicroelectronics International N.V. 
+  13:Src/main.c    ****   * All rights reserved.
+  14:Src/main.c    ****   *
+  15:Src/main.c    ****   * Redistribution and use in source and binary forms, with or without 
+  16:Src/main.c    ****   * modification, are permitted, provided that the following conditions are met:
+  17:Src/main.c    ****   *
+  18:Src/main.c    ****   * 1. Redistribution of source code must retain the above copyright notice, 
+  19:Src/main.c    ****   *    this list of conditions and the following disclaimer.
+  20:Src/main.c    ****   * 2. Redistributions in binary form must reproduce the above copyright notice,
+  21:Src/main.c    ****   *    this list of conditions and the following disclaimer in the documentation
+  22:Src/main.c    ****   *    and/or other materials provided with the distribution.
+  23:Src/main.c    ****   * 3. Neither the name of STMicroelectronics nor the names of other 
+  24:Src/main.c    ****   *    contributors to this software may be used to endorse or promote products 
+  25:Src/main.c    ****   *    derived from this software without specific written permission.
+  26:Src/main.c    ****   * 4. This software, including modifications and/or derivative works of this 
+  27:Src/main.c    ****   *    software, must execute solely and exclusively on microcontroller or
+  28:Src/main.c    ****   *    microprocessor devices manufactured by or for STMicroelectronics.
+  29:Src/main.c    ****   * 5. Redistribution and use of this software other than as permitted under 
+  30:Src/main.c    ****   *    this license is void and will automatically terminate your rights under 
+  31:Src/main.c    ****   *    this license. 
+  32:Src/main.c    ****   *
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 2
+
+
+  33:Src/main.c    ****   * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
+  34:Src/main.c    ****   * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
+  35:Src/main.c    ****   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+  36:Src/main.c    ****   * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
+  37:Src/main.c    ****   * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
+  38:Src/main.c    ****   * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  39:Src/main.c    ****   * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  40:Src/main.c    ****   * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+  41:Src/main.c    ****   * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+  42:Src/main.c    ****   * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+  43:Src/main.c    ****   * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  44:Src/main.c    ****   * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  45:Src/main.c    ****   *
+  46:Src/main.c    ****   ******************************************************************************
+  47:Src/main.c    ****   */
+  48:Src/main.c    **** 
+  49:Src/main.c    **** /* Includes ------------------------------------------------------------------*/
+  50:Src/main.c    **** #include "main.h"
+  51:Src/main.c    **** #include "stm32f4xx_hal.h"
+  52:Src/main.c    **** #include "usb_device.h"
+  53:Src/main.c    **** 
+  54:Src/main.c    **** /* USER CODE BEGIN Includes */
+  55:Src/main.c    **** 
+  56:Src/main.c    **** /* USER CODE END Includes */
+  57:Src/main.c    **** 
+  58:Src/main.c    **** /* Private variables ---------------------------------------------------------*/
+  59:Src/main.c    **** typedef void (*pFunction)(void);
+  60:Src/main.c    **** 
+  61:Src/main.c    **** pFunction JumpToApplication;
+  62:Src/main.c    **** uint32_t JumpAddress;
+  63:Src/main.c    **** /* USER CODE BEGIN PV */
+  64:Src/main.c    **** /* Private variables ---------------------------------------------------------*/
+  65:Src/main.c    **** 
+  66:Src/main.c    **** /* USER CODE END PV */
+  67:Src/main.c    **** 
+  68:Src/main.c    **** /* Private function prototypes -----------------------------------------------*/
+  69:Src/main.c    **** void SystemClock_Config(void);
+  70:Src/main.c    **** static void MX_GPIO_Init(void);
+  71:Src/main.c    **** 
+  72:Src/main.c    **** /* USER CODE BEGIN PFP */
+  73:Src/main.c    **** /* Private function prototypes -----------------------------------------------*/
+  74:Src/main.c    **** 
+  75:Src/main.c    **** /* USER CODE END PFP */
+  76:Src/main.c    **** 
+  77:Src/main.c    **** /* USER CODE BEGIN 0 */
+  78:Src/main.c    **** 
+  79:Src/main.c    **** /* USER CODE END 0 */
+  80:Src/main.c    **** 
+  81:Src/main.c    **** int main(void)
+  82:Src/main.c    **** {
+  83:Src/main.c    **** 
+  84:Src/main.c    ****   /* USER CODE BEGIN 1 */
+  85:Src/main.c    **** 
+  86:Src/main.c    ****   /* USER CODE END 1 */
+  87:Src/main.c    **** 
+  88:Src/main.c    ****   /* MCU Configuration----------------------------------------------------------*/
+  89:Src/main.c    **** 
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 3
+
+
+  90:Src/main.c    ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  91:Src/main.c    ****   HAL_Init();
+  92:Src/main.c    **** 
+  93:Src/main.c    ****   /* USER CODE BEGIN Init */
+  94:Src/main.c    **** 
+  95:Src/main.c    ****   /* USER CODE END Init */
+  96:Src/main.c    **** 
+  97:Src/main.c    ****   /* Configure the system clock */
+  98:Src/main.c    ****   SystemClock_Config();
+  99:Src/main.c    **** 
+ 100:Src/main.c    ****   /* USER CODE BEGIN SysInit */
+ 101:Src/main.c    **** 
+ 102:Src/main.c    ****   /* USER CODE END SysInit */
+ 103:Src/main.c    **** 
+ 104:Src/main.c    ****   /* Initialize all configured peripherals */
+ 105:Src/main.c    ****   MX_GPIO_Init();
+ 106:Src/main.c    **** 
+ 107:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 108:Src/main.c    ****   if (HAL_GPIO_ReadPin(USER_BTN_GPIO_Port, USER_BTN_Pin) == GPIO_PIN_SET)
+ 109:Src/main.c    ****   {
+ 110:Src/main.c    ****     HAL_GPIO_WritePin(GPIOG, LD3_Pin, GPIO_PIN_SET); // For debug
+ 111:Src/main.c    ****     /* Test if user code is programmed starting from address 0x0800C000 */
+ 112:Src/main.c    ****     if (((*(__IO uint32_t *)USBD_DFU_APP_DEFAULT_ADD) & 0x2FF80000) == 0x20000000)
+ 113:Src/main.c    ****     {
+ 114:Src/main.c    ****       HAL_GPIO_WritePin(GPIOG, LD4_Pin, GPIO_PIN_SET); // For debug
+ 115:Src/main.c    ****       /* Jump to user application */
+ 116:Src/main.c    ****       JumpAddress = *(__IO uint32_t *)(USBD_DFU_APP_DEFAULT_ADD + 4);
+ 117:Src/main.c    ****       JumpToApplication = (pFunction)JumpAddress;
+ 118:Src/main.c    **** 
+ 119:Src/main.c    ****       /* Reset of all peripherals */
+ 120:Src/main.c    ****       HAL_DeInit();
+ 121:Src/main.c    **** 
+ 122:Src/main.c    ****       /* Set interrupt vector to app code */
+ 123:Src/main.c    ****       SCB->VTOR = USBD_DFU_APP_DEFAULT_ADD;
+ 124:Src/main.c    **** 
+ 125:Src/main.c    ****       /* Initialize user application's Stack Pointer */
+ 126:Src/main.c    ****       __set_MSP(*(__IO uint32_t *)USBD_DFU_APP_DEFAULT_ADD);
+ 127:Src/main.c    ****       JumpToApplication();
+ 128:Src/main.c    ****     }
+ 129:Src/main.c    ****   }
+ 130:Src/main.c    ****   /* USER CODE END 2 */
+ 131:Src/main.c    **** 
+ 132:Src/main.c    ****   MX_USB_DEVICE_Init();
+ 133:Src/main.c    **** 
+ 134:Src/main.c    ****   /* Infinite loop */
+ 135:Src/main.c    ****   /* USER CODE BEGIN WHILE */
+ 136:Src/main.c    ****   while (1)
+ 137:Src/main.c    ****   {
+ 138:Src/main.c    ****     /* USER CODE END WHILE */
+ 139:Src/main.c    **** 
+ 140:Src/main.c    ****     /* USER CODE BEGIN 3 */
+ 141:Src/main.c    ****   }
+ 142:Src/main.c    ****   /* USER CODE END 3 */
+ 143:Src/main.c    **** }
+ 144:Src/main.c    **** 
+ 145:Src/main.c    **** /** System Clock Configuration
+ 146:Src/main.c    **** */
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 4
+
+
+ 147:Src/main.c    **** void SystemClock_Config(void)
+ 148:Src/main.c    **** {
+ 149:Src/main.c    **** 
+ 150:Src/main.c    ****   RCC_OscInitTypeDef RCC_OscInitStruct;
+ 151:Src/main.c    ****   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+ 152:Src/main.c    **** 
+ 153:Src/main.c    ****   /**Configure the main internal regulator output voltage 
+ 154:Src/main.c    ****     */
+ 155:Src/main.c    ****   __HAL_RCC_PWR_CLK_ENABLE();
+ 156:Src/main.c    **** 
+ 157:Src/main.c    ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+ 158:Src/main.c    **** 
+ 159:Src/main.c    ****   /**Initializes the CPU, AHB and APB busses clocks 
+ 160:Src/main.c    ****     */
+ 161:Src/main.c    ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+ 162:Src/main.c    ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+ 163:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 164:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+ 165:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLM = 4;
+ 166:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLN = 168;
+ 167:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+ 168:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLQ = 7;
+ 169:Src/main.c    ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 170:Src/main.c    ****   {
+ 171:Src/main.c    ****     _Error_Handler(__FILE__, __LINE__);
+ 172:Src/main.c    ****   }
+ 173:Src/main.c    **** 
+ 174:Src/main.c    ****   /**Initializes the CPU, AHB and APB busses clocks 
+ 175:Src/main.c    ****     */
+ 176:Src/main.c    ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | R
+ 177:Src/main.c    ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+ 178:Src/main.c    ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 179:Src/main.c    ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+ 180:Src/main.c    ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+ 181:Src/main.c    **** 
+ 182:Src/main.c    ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+ 183:Src/main.c    ****   {
+ 184:Src/main.c    ****     _Error_Handler(__FILE__, __LINE__);
+ 185:Src/main.c    ****   }
+ 186:Src/main.c    **** 
+ 187:Src/main.c    ****   /**Configure the Systick interrupt time 
+ 188:Src/main.c    ****     */
+ 189:Src/main.c    ****   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
+ 190:Src/main.c    **** 
+ 191:Src/main.c    ****   /**Configure the Systick 
+ 192:Src/main.c    ****     */
+ 193:Src/main.c    ****   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+ 194:Src/main.c    **** 
+ 195:Src/main.c    ****   /* SysTick_IRQn interrupt configuration */
+ 196:Src/main.c    ****   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+ 197:Src/main.c    **** }
+ 198:Src/main.c    **** 
+ 199:Src/main.c    **** /** Configure pins as 
+ 200:Src/main.c    ****         * Analog 
+ 201:Src/main.c    ****         * Input 
+ 202:Src/main.c    ****         * Output
+ 203:Src/main.c    ****         * EVENT_OUT
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 5
+
+
+ 204:Src/main.c    ****         * EXTI
+ 205:Src/main.c    ****      PF0   ------> FMC_A0
+ 206:Src/main.c    ****      PF1   ------> FMC_A1
+ 207:Src/main.c    ****      PF2   ------> FMC_A2
+ 208:Src/main.c    ****      PF3   ------> FMC_A3
+ 209:Src/main.c    ****      PF4   ------> FMC_A4
+ 210:Src/main.c    ****      PF5   ------> FMC_A5
+ 211:Src/main.c    ****      PF7   ------> SPI5_SCK
+ 212:Src/main.c    ****      PF8   ------> SPI5_MISO
+ 213:Src/main.c    ****      PF9   ------> SPI5_MOSI
+ 214:Src/main.c    ****      PF10   ------> LTDC_DE
+ 215:Src/main.c    ****      PC0   ------> FMC_SDNWE
+ 216:Src/main.c    ****      PA3   ------> LTDC_B5
+ 217:Src/main.c    ****      PA4   ------> LTDC_VSYNC
+ 218:Src/main.c    ****      PA6   ------> LTDC_G2
+ 219:Src/main.c    ****      PB0   ------> LTDC_R3
+ 220:Src/main.c    ****      PB1   ------> LTDC_R6
+ 221:Src/main.c    ****      PF11   ------> FMC_SDNRAS
+ 222:Src/main.c    ****      PF12   ------> FMC_A6
+ 223:Src/main.c    ****      PF13   ------> FMC_A7
+ 224:Src/main.c    ****      PF14   ------> FMC_A8
+ 225:Src/main.c    ****      PF15   ------> FMC_A9
+ 226:Src/main.c    ****      PG0   ------> FMC_A10
+ 227:Src/main.c    ****      PG1   ------> FMC_A11
+ 228:Src/main.c    ****      PE7   ------> FMC_D4_DA4
+ 229:Src/main.c    ****      PE8   ------> FMC_D5_DA5
+ 230:Src/main.c    ****      PE9   ------> FMC_D6_DA6
+ 231:Src/main.c    ****      PE10   ------> FMC_D7_DA7
+ 232:Src/main.c    ****      PE11   ------> FMC_D8_DA8
+ 233:Src/main.c    ****      PE12   ------> FMC_D9_DA9
+ 234:Src/main.c    ****      PE13   ------> FMC_D10_DA10
+ 235:Src/main.c    ****      PE14   ------> FMC_D11_DA11
+ 236:Src/main.c    ****      PE15   ------> FMC_D12_DA12
+ 237:Src/main.c    ****      PB10   ------> LTDC_G4
+ 238:Src/main.c    ****      PB11   ------> LTDC_G5
+ 239:Src/main.c    ****      PD8   ------> FMC_D13_DA13
+ 240:Src/main.c    ****      PD9   ------> FMC_D14_DA14
+ 241:Src/main.c    ****      PD10   ------> FMC_D15_DA15
+ 242:Src/main.c    ****      PD14   ------> FMC_D0_DA0
+ 243:Src/main.c    ****      PD15   ------> FMC_D1_DA1
+ 244:Src/main.c    ****      PG4   ------> FMC_A14_BA0
+ 245:Src/main.c    ****      PG5   ------> FMC_A15_BA1
+ 246:Src/main.c    ****      PG6   ------> LTDC_R7
+ 247:Src/main.c    ****      PG7   ------> LTDC_CLK
+ 248:Src/main.c    ****      PG8   ------> FMC_SDCLK
+ 249:Src/main.c    ****      PC6   ------> LTDC_HSYNC
+ 250:Src/main.c    ****      PC7   ------> LTDC_G6
+ 251:Src/main.c    ****      PC9   ------> I2C3_SDA
+ 252:Src/main.c    ****      PA8   ------> I2C3_SCL
+ 253:Src/main.c    ****      PA11   ------> LTDC_R4
+ 254:Src/main.c    ****      PA12   ------> LTDC_R5
+ 255:Src/main.c    ****      PC10   ------> LTDC_R2
+ 256:Src/main.c    ****      PD0   ------> FMC_D2_DA2
+ 257:Src/main.c    ****      PD1   ------> FMC_D3_DA3
+ 258:Src/main.c    ****      PD3   ------> LTDC_G7
+ 259:Src/main.c    ****      PD6   ------> LTDC_B2
+ 260:Src/main.c    ****      PG10   ------> LTDC_G3
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 6
+
+
+ 261:Src/main.c    ****      PG11   ------> LTDC_B3
+ 262:Src/main.c    ****      PG12   ------> LTDC_B4
+ 263:Src/main.c    ****      PG15   ------> FMC_SDNCAS
+ 264:Src/main.c    ****      PB5   ------> FMC_SDCKE1
+ 265:Src/main.c    ****      PB6   ------> FMC_SDNE1
+ 266:Src/main.c    ****      PB8   ------> LTDC_B6
+ 267:Src/main.c    ****      PB9   ------> LTDC_B7
+ 268:Src/main.c    ****      PE0   ------> FMC_NBL0
+ 269:Src/main.c    ****      PE1   ------> FMC_NBL1
+ 270:Src/main.c    **** */
+ 271:Src/main.c    **** static void MX_GPIO_Init(void)
+ 272:Src/main.c    **** {
+  27              		.loc 1 272 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 56
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 36
+  34              		.cfi_offset 4, -36
+  35              		.cfi_offset 5, -32
+  36              		.cfi_offset 6, -28
+  37              		.cfi_offset 7, -24
+  38              		.cfi_offset 8, -20
+  39              		.cfi_offset 9, -16
+  40              		.cfi_offset 10, -12
+  41              		.cfi_offset 11, -8
+  42              		.cfi_offset 14, -4
+  43 0004 8FB0     		sub	sp, sp, #60
+  44              	.LCFI1:
+  45              		.cfi_def_cfa_offset 96
+  46              	.LBB4:
+ 273:Src/main.c    **** 
+ 274:Src/main.c    ****   GPIO_InitTypeDef GPIO_InitStruct;
+ 275:Src/main.c    **** 
+ 276:Src/main.c    ****   /* GPIO Ports Clock Enable */
+ 277:Src/main.c    ****   __HAL_RCC_GPIOC_CLK_ENABLE();
+  47              		.loc 1 277 0
+  48 0006 0024     		movs	r4, #0
+  49 0008 0194     		str	r4, [sp, #4]
+  50 000a A94B     		ldr	r3, .L3
+  51 000c 1A6B     		ldr	r2, [r3, #48]
+  52 000e 42F00402 		orr	r2, r2, #4
+  53 0012 1A63     		str	r2, [r3, #48]
+  54 0014 1A6B     		ldr	r2, [r3, #48]
+  55 0016 02F00402 		and	r2, r2, #4
+  56 001a 0192     		str	r2, [sp, #4]
+  57 001c 019A     		ldr	r2, [sp, #4]
+  58              	.LBE4:
+  59              	.LBB5:
+ 278:Src/main.c    ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  60              		.loc 1 278 0
+  61 001e 0294     		str	r4, [sp, #8]
+  62 0020 1A6B     		ldr	r2, [r3, #48]
+  63 0022 42F02002 		orr	r2, r2, #32
+  64 0026 1A63     		str	r2, [r3, #48]
+  65 0028 1A6B     		ldr	r2, [r3, #48]
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 7
+
+
+  66 002a 02F02002 		and	r2, r2, #32
+  67 002e 0292     		str	r2, [sp, #8]
+  68 0030 029A     		ldr	r2, [sp, #8]
+  69              	.LBE5:
+  70              	.LBB6:
+ 279:Src/main.c    ****   __HAL_RCC_GPIOH_CLK_ENABLE();
+  71              		.loc 1 279 0
+  72 0032 0394     		str	r4, [sp, #12]
+  73 0034 1A6B     		ldr	r2, [r3, #48]
+  74 0036 42F08002 		orr	r2, r2, #128
+  75 003a 1A63     		str	r2, [r3, #48]
+  76 003c 1A6B     		ldr	r2, [r3, #48]
+  77 003e 02F08002 		and	r2, r2, #128
+  78 0042 0392     		str	r2, [sp, #12]
+  79 0044 039A     		ldr	r2, [sp, #12]
+  80              	.LBE6:
+  81              	.LBB7:
+ 280:Src/main.c    ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  82              		.loc 1 280 0
+  83 0046 0494     		str	r4, [sp, #16]
+  84 0048 1A6B     		ldr	r2, [r3, #48]
+  85 004a 42F00102 		orr	r2, r2, #1
+  86 004e 1A63     		str	r2, [r3, #48]
+  87 0050 1A6B     		ldr	r2, [r3, #48]
+  88 0052 02F00102 		and	r2, r2, #1
+  89 0056 0492     		str	r2, [sp, #16]
+  90 0058 049A     		ldr	r2, [sp, #16]
+  91              	.LBE7:
+  92              	.LBB8:
+ 281:Src/main.c    ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  93              		.loc 1 281 0
+  94 005a 0594     		str	r4, [sp, #20]
+  95 005c 1A6B     		ldr	r2, [r3, #48]
+  96 005e 42F00202 		orr	r2, r2, #2
+  97 0062 1A63     		str	r2, [r3, #48]
+  98 0064 1A6B     		ldr	r2, [r3, #48]
+  99 0066 02F00202 		and	r2, r2, #2
+ 100 006a 0592     		str	r2, [sp, #20]
+ 101 006c 059A     		ldr	r2, [sp, #20]
+ 102              	.LBE8:
+ 103              	.LBB9:
+ 282:Src/main.c    ****   __HAL_RCC_GPIOG_CLK_ENABLE();
+ 104              		.loc 1 282 0
+ 105 006e 0694     		str	r4, [sp, #24]
+ 106 0070 1A6B     		ldr	r2, [r3, #48]
+ 107 0072 42F04002 		orr	r2, r2, #64
+ 108 0076 1A63     		str	r2, [r3, #48]
+ 109 0078 1A6B     		ldr	r2, [r3, #48]
+ 110 007a 02F04002 		and	r2, r2, #64
+ 111 007e 0692     		str	r2, [sp, #24]
+ 112 0080 069A     		ldr	r2, [sp, #24]
+ 113              	.LBE9:
+ 114              	.LBB10:
+ 283:Src/main.c    ****   __HAL_RCC_GPIOE_CLK_ENABLE();
+ 115              		.loc 1 283 0
+ 116 0082 0794     		str	r4, [sp, #28]
+ 117 0084 1A6B     		ldr	r2, [r3, #48]
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 8
+
+
+ 118 0086 42F01002 		orr	r2, r2, #16
+ 119 008a 1A63     		str	r2, [r3, #48]
+ 120 008c 1A6B     		ldr	r2, [r3, #48]
+ 121 008e 02F01002 		and	r2, r2, #16
+ 122 0092 0792     		str	r2, [sp, #28]
+ 123 0094 079A     		ldr	r2, [sp, #28]
+ 124              	.LBE10:
+ 125              	.LBB11:
+ 284:Src/main.c    ****   __HAL_RCC_GPIOD_CLK_ENABLE();
+ 126              		.loc 1 284 0
+ 127 0096 0894     		str	r4, [sp, #32]
+ 128 0098 1A6B     		ldr	r2, [r3, #48]
+ 129 009a 42F00802 		orr	r2, r2, #8
+ 130 009e 1A63     		str	r2, [r3, #48]
+ 131 00a0 1B6B     		ldr	r3, [r3, #48]
+ 132 00a2 03F00803 		and	r3, r3, #8
+ 133 00a6 0893     		str	r3, [sp, #32]
+ 134 00a8 089B     		ldr	r3, [sp, #32]
+ 135              	.LBE11:
+ 285:Src/main.c    **** 
+ 286:Src/main.c    ****   /*Configure GPIO pin Output Level */
+ 287:Src/main.c    ****   HAL_GPIO_WritePin(GPIOC, NCS_MEMS_SPI_Pin | CSX_Pin | OTG_FS_PSO_Pin, GPIO_PIN_RESET);
+ 136              		.loc 1 287 0
+ 137 00aa 2246     		mov	r2, r4
+ 138 00ac 1621     		movs	r1, #22
+ 139 00ae 8148     		ldr	r0, .L3+4
+ 140 00b0 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 141              	.LVL0:
+ 288:Src/main.c    **** 
+ 289:Src/main.c    ****   /*Configure GPIO pin Output Level */
+ 290:Src/main.c    ****   HAL_GPIO_WritePin(ACP_RST_GPIO_Port, ACP_RST_Pin, GPIO_PIN_RESET);
+ 142              		.loc 1 290 0
+ 143 00b4 2246     		mov	r2, r4
+ 144 00b6 8021     		movs	r1, #128
+ 145 00b8 7F48     		ldr	r0, .L3+8
+ 146 00ba FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 147              	.LVL1:
+ 291:Src/main.c    **** 
+ 292:Src/main.c    ****   /*Configure GPIO pin Output Level */
+ 293:Src/main.c    ****   HAL_GPIO_WritePin(GPIOD, RDX_Pin | WRX_DCX_Pin, GPIO_PIN_RESET);
+ 148              		.loc 1 293 0
+ 149 00be 2246     		mov	r2, r4
+ 150 00c0 4FF44051 		mov	r1, #12288
+ 151 00c4 7D48     		ldr	r0, .L3+12
+ 152 00c6 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 153              	.LVL2:
+ 294:Src/main.c    **** 
+ 295:Src/main.c    ****   /*Configure GPIO pin Output Level */
+ 296:Src/main.c    ****   HAL_GPIO_WritePin(GPIOG, LD3_Pin | LD4_Pin, GPIO_PIN_RESET);
+ 154              		.loc 1 296 0
+ 155 00ca 2246     		mov	r2, r4
+ 156 00cc 4FF4C041 		mov	r1, #24576
+ 157 00d0 7B48     		ldr	r0, .L3+16
+ 158 00d2 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 159              	.LVL3:
+ 297:Src/main.c    **** 
+ 298:Src/main.c    ****   /*Configure GPIO pins : A0_Pin A1_Pin A2_Pin A3_Pin 
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 9
+
+
+ 299:Src/main.c    ****                            A4_Pin A5_Pin SDNRAS_Pin A6_Pin 
+ 300:Src/main.c    ****                            A7_Pin A8_Pin A9_Pin */
+ 301:Src/main.c    ****   GPIO_InitStruct.Pin = A0_Pin | A1_Pin | A2_Pin | A3_Pin | A4_Pin | A5_Pin | SDNRAS_Pin | A6_Pin |
+ 160              		.loc 1 301 0
+ 161 00d6 4FF63F03 		movw	r3, #63551
+ 162 00da 0993     		str	r3, [sp, #36]
+ 302:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 163              		.loc 1 302 0
+ 164 00dc 0225     		movs	r5, #2
+ 165 00de 0A95     		str	r5, [sp, #40]
+ 303:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 166              		.loc 1 303 0
+ 167 00e0 0B94     		str	r4, [sp, #44]
+ 304:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 168              		.loc 1 304 0
+ 169 00e2 0327     		movs	r7, #3
+ 170 00e4 0C97     		str	r7, [sp, #48]
+ 305:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
+ 171              		.loc 1 305 0
+ 172 00e6 4FF00C08 		mov	r8, #12
+ 173 00ea CDF83480 		str	r8, [sp, #52]
+ 306:Src/main.c    ****   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+ 174              		.loc 1 306 0
+ 175 00ee 754E     		ldr	r6, .L3+20
+ 176 00f0 09A9     		add	r1, sp, #36
+ 177 00f2 3046     		mov	r0, r6
+ 178 00f4 FFF7FEFF 		bl	HAL_GPIO_Init
+ 179              	.LVL4:
+ 307:Src/main.c    **** 
+ 308:Src/main.c    ****   /*Configure GPIO pins : SPI5_SCK_Pin SPI5_MISO_Pin SPI5_MOSI_Pin */
+ 309:Src/main.c    ****   GPIO_InitStruct.Pin = SPI5_SCK_Pin | SPI5_MISO_Pin | SPI5_MOSI_Pin;
+ 180              		.loc 1 309 0
+ 181 00f8 4FF46073 		mov	r3, #896
+ 182 00fc 0993     		str	r3, [sp, #36]
+ 310:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 183              		.loc 1 310 0
+ 184 00fe 0A95     		str	r5, [sp, #40]
+ 311:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 185              		.loc 1 311 0
+ 186 0100 0B94     		str	r4, [sp, #44]
+ 312:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 187              		.loc 1 312 0
+ 188 0102 0C94     		str	r4, [sp, #48]
+ 313:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF5_SPI5;
+ 189              		.loc 1 313 0
+ 190 0104 0523     		movs	r3, #5
+ 191 0106 0D93     		str	r3, [sp, #52]
+ 314:Src/main.c    ****   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+ 192              		.loc 1 314 0
+ 193 0108 09A9     		add	r1, sp, #36
+ 194 010a 3046     		mov	r0, r6
+ 195 010c FFF7FEFF 		bl	HAL_GPIO_Init
+ 196              	.LVL5:
+ 315:Src/main.c    **** 
+ 316:Src/main.c    ****   /*Configure GPIO pin : ENABLE_Pin */
+ 317:Src/main.c    ****   GPIO_InitStruct.Pin = ENABLE_Pin;
+ 197              		.loc 1 317 0
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 10
+
+
+ 198 0110 4FF48063 		mov	r3, #1024
+ 199 0114 0993     		str	r3, [sp, #36]
+ 318:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 200              		.loc 1 318 0
+ 201 0116 0A95     		str	r5, [sp, #40]
+ 319:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 202              		.loc 1 319 0
+ 203 0118 0B94     		str	r4, [sp, #44]
+ 320:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 204              		.loc 1 320 0
+ 205 011a 0C94     		str	r4, [sp, #48]
+ 321:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF14_LTDC;
+ 206              		.loc 1 321 0
+ 207 011c 4FF00E09 		mov	r9, #14
+ 208 0120 CDF83490 		str	r9, [sp, #52]
+ 322:Src/main.c    ****   HAL_GPIO_Init(ENABLE_GPIO_Port, &GPIO_InitStruct);
+ 209              		.loc 1 322 0
+ 210 0124 09A9     		add	r1, sp, #36
+ 211 0126 3046     		mov	r0, r6
+ 212 0128 FFF7FEFF 		bl	HAL_GPIO_Init
+ 213              	.LVL6:
+ 323:Src/main.c    **** 
+ 324:Src/main.c    ****   /*Configure GPIO pin : SDNWE_Pin */
+ 325:Src/main.c    ****   GPIO_InitStruct.Pin = SDNWE_Pin;
+ 214              		.loc 1 325 0
+ 215 012c 0126     		movs	r6, #1
+ 216 012e 0996     		str	r6, [sp, #36]
+ 326:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 217              		.loc 1 326 0
+ 218 0130 0A95     		str	r5, [sp, #40]
+ 327:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 219              		.loc 1 327 0
+ 220 0132 0B94     		str	r4, [sp, #44]
+ 328:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 221              		.loc 1 328 0
+ 222 0134 0C97     		str	r7, [sp, #48]
+ 329:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
+ 223              		.loc 1 329 0
+ 224 0136 CDF83480 		str	r8, [sp, #52]
+ 330:Src/main.c    ****   HAL_GPIO_Init(SDNWE_GPIO_Port, &GPIO_InitStruct);
+ 225              		.loc 1 330 0
+ 226 013a 09A9     		add	r1, sp, #36
+ 227 013c 5D48     		ldr	r0, .L3+4
+ 228 013e FFF7FEFF 		bl	HAL_GPIO_Init
+ 229              	.LVL7:
+ 331:Src/main.c    **** 
+ 332:Src/main.c    ****   /*Configure GPIO pins : NCS_MEMS_SPI_Pin CSX_Pin OTG_FS_PSO_Pin */
+ 333:Src/main.c    ****   GPIO_InitStruct.Pin = NCS_MEMS_SPI_Pin | CSX_Pin | OTG_FS_PSO_Pin;
+ 230              		.loc 1 333 0
+ 231 0142 1623     		movs	r3, #22
+ 232 0144 0993     		str	r3, [sp, #36]
+ 334:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 233              		.loc 1 334 0
+ 234 0146 0A96     		str	r6, [sp, #40]
+ 335:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 235              		.loc 1 335 0
+ 236 0148 0B94     		str	r4, [sp, #44]
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 11
+
+
+ 336:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 237              		.loc 1 336 0
+ 238 014a 0C94     		str	r4, [sp, #48]
+ 337:Src/main.c    ****   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 239              		.loc 1 337 0
+ 240 014c 09A9     		add	r1, sp, #36
+ 241 014e 5948     		ldr	r0, .L3+4
+ 242 0150 FFF7FEFF 		bl	HAL_GPIO_Init
+ 243              	.LVL8:
+ 338:Src/main.c    **** 
+ 339:Src/main.c    ****   /*Configure GPIO pin : USER_BTN_Pin */
+ 340:Src/main.c    ****   GPIO_InitStruct.Pin = USER_BTN_Pin;
+ 244              		.loc 1 340 0
+ 245 0154 0996     		str	r6, [sp, #36]
+ 341:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 246              		.loc 1 341 0
+ 247 0156 0A94     		str	r4, [sp, #40]
+ 342:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 248              		.loc 1 342 0
+ 249 0158 0B94     		str	r4, [sp, #44]
+ 343:Src/main.c    ****   HAL_GPIO_Init(USER_BTN_GPIO_Port, &GPIO_InitStruct);
+ 250              		.loc 1 343 0
+ 251 015a 09A9     		add	r1, sp, #36
+ 252 015c 5648     		ldr	r0, .L3+8
+ 253 015e FFF7FEFF 		bl	HAL_GPIO_Init
+ 254              	.LVL9:
+ 344:Src/main.c    **** 
+ 345:Src/main.c    ****   /*Configure GPIO pins : MEMS_INT1_Pin MEMS_INT2_Pin TP_INT1_Pin */
+ 346:Src/main.c    ****   GPIO_InitStruct.Pin = MEMS_INT1_Pin | MEMS_INT2_Pin | TP_INT1_Pin;
+ 255              		.loc 1 346 0
+ 256 0162 48F20603 		movw	r3, #32774
+ 257 0166 0993     		str	r3, [sp, #36]
+ 347:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING;
+ 258              		.loc 1 347 0
+ 259 0168 DFF864A1 		ldr	r10, .L3+32
+ 260 016c CDF828A0 		str	r10, [sp, #40]
+ 348:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 261              		.loc 1 348 0
+ 262 0170 0B94     		str	r4, [sp, #44]
+ 349:Src/main.c    ****   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 263              		.loc 1 349 0
+ 264 0172 09A9     		add	r1, sp, #36
+ 265 0174 5048     		ldr	r0, .L3+8
+ 266 0176 FFF7FEFF 		bl	HAL_GPIO_Init
+ 267              	.LVL10:
+ 350:Src/main.c    **** 
+ 351:Src/main.c    ****   /*Configure GPIO pins : B5_Pin VSYNC_Pin G2_Pin R4_Pin 
+ 352:Src/main.c    ****                            R5_Pin */
+ 353:Src/main.c    ****   GPIO_InitStruct.Pin = B5_Pin | VSYNC_Pin | G2_Pin | R4_Pin | R5_Pin;
+ 268              		.loc 1 353 0
+ 269 017a 41F65803 		movw	r3, #6232
+ 270 017e 0993     		str	r3, [sp, #36]
+ 354:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 271              		.loc 1 354 0
+ 272 0180 0A95     		str	r5, [sp, #40]
+ 355:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 273              		.loc 1 355 0
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 12
+
+
+ 274 0182 0B94     		str	r4, [sp, #44]
+ 356:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 275              		.loc 1 356 0
+ 276 0184 0C94     		str	r4, [sp, #48]
+ 357:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF14_LTDC;
+ 277              		.loc 1 357 0
+ 278 0186 CDF83490 		str	r9, [sp, #52]
+ 358:Src/main.c    ****   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 279              		.loc 1 358 0
+ 280 018a 09A9     		add	r1, sp, #36
+ 281 018c 4A48     		ldr	r0, .L3+8
+ 282 018e FFF7FEFF 		bl	HAL_GPIO_Init
+ 283              	.LVL11:
+ 359:Src/main.c    **** 
+ 360:Src/main.c    ****   /*Configure GPIO pin : ACP_RST_Pin */
+ 361:Src/main.c    ****   GPIO_InitStruct.Pin = ACP_RST_Pin;
+ 284              		.loc 1 361 0
+ 285 0192 8023     		movs	r3, #128
+ 286 0194 0993     		str	r3, [sp, #36]
+ 362:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 287              		.loc 1 362 0
+ 288 0196 0A96     		str	r6, [sp, #40]
+ 363:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 289              		.loc 1 363 0
+ 290 0198 0B94     		str	r4, [sp, #44]
+ 364:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 291              		.loc 1 364 0
+ 292 019a 0C94     		str	r4, [sp, #48]
+ 365:Src/main.c    ****   HAL_GPIO_Init(ACP_RST_GPIO_Port, &GPIO_InitStruct);
+ 293              		.loc 1 365 0
+ 294 019c 09A9     		add	r1, sp, #36
+ 295 019e 4648     		ldr	r0, .L3+8
+ 296 01a0 FFF7FEFF 		bl	HAL_GPIO_Init
+ 297              	.LVL12:
+ 366:Src/main.c    **** 
+ 367:Src/main.c    ****   /*Configure GPIO pin : OTG_FS_OC_Pin */
+ 368:Src/main.c    ****   GPIO_InitStruct.Pin = OTG_FS_OC_Pin;
+ 298              		.loc 1 368 0
+ 299 01a4 2023     		movs	r3, #32
+ 300 01a6 0993     		str	r3, [sp, #36]
+ 369:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING;
+ 301              		.loc 1 369 0
+ 302 01a8 CDF828A0 		str	r10, [sp, #40]
+ 370:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 303              		.loc 1 370 0
+ 304 01ac 0B94     		str	r4, [sp, #44]
+ 371:Src/main.c    ****   HAL_GPIO_Init(OTG_FS_OC_GPIO_Port, &GPIO_InitStruct);
+ 305              		.loc 1 371 0
+ 306 01ae 09A9     		add	r1, sp, #36
+ 307 01b0 4048     		ldr	r0, .L3+4
+ 308 01b2 FFF7FEFF 		bl	HAL_GPIO_Init
+ 309              	.LVL13:
+ 372:Src/main.c    **** 
+ 373:Src/main.c    ****   /*Configure GPIO pins : R3_Pin R6_Pin */
+ 374:Src/main.c    ****   GPIO_InitStruct.Pin = R3_Pin | R6_Pin;
+ 310              		.loc 1 374 0
+ 311 01b6 0997     		str	r7, [sp, #36]
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 13
+
+
+ 375:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 312              		.loc 1 375 0
+ 313 01b8 0A95     		str	r5, [sp, #40]
+ 376:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 314              		.loc 1 376 0
+ 315 01ba 0B94     		str	r4, [sp, #44]
+ 377:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 316              		.loc 1 377 0
+ 317 01bc 0C94     		str	r4, [sp, #48]
+ 378:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF9_LTDC;
+ 318              		.loc 1 378 0
+ 319 01be 0923     		movs	r3, #9
+ 320 01c0 0D93     		str	r3, [sp, #52]
+ 379:Src/main.c    ****   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 321              		.loc 1 379 0
+ 322 01c2 09A9     		add	r1, sp, #36
+ 323 01c4 4048     		ldr	r0, .L3+24
+ 324 01c6 FFF7FEFF 		bl	HAL_GPIO_Init
+ 325              	.LVL14:
+ 380:Src/main.c    **** 
+ 381:Src/main.c    ****   /*Configure GPIO pin : BOOT1_Pin */
+ 382:Src/main.c    ****   GPIO_InitStruct.Pin = BOOT1_Pin;
+ 326              		.loc 1 382 0
+ 327 01ca 4FF0040A 		mov	r10, #4
+ 328 01ce CDF824A0 		str	r10, [sp, #36]
+ 383:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 329              		.loc 1 383 0
+ 330 01d2 0A94     		str	r4, [sp, #40]
+ 384:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 331              		.loc 1 384 0
+ 332 01d4 0B94     		str	r4, [sp, #44]
+ 385:Src/main.c    ****   HAL_GPIO_Init(BOOT1_GPIO_Port, &GPIO_InitStruct);
+ 333              		.loc 1 385 0
+ 334 01d6 09A9     		add	r1, sp, #36
+ 335 01d8 3B48     		ldr	r0, .L3+24
+ 336 01da FFF7FEFF 		bl	HAL_GPIO_Init
+ 337              	.LVL15:
+ 386:Src/main.c    **** 
+ 387:Src/main.c    ****   /*Configure GPIO pins : A10_Pin A11_Pin BA0_Pin BA1_Pin 
+ 388:Src/main.c    ****                            SDCLK_Pin SDNCAS_Pin */
+ 389:Src/main.c    ****   GPIO_InitStruct.Pin = A10_Pin | A11_Pin | BA0_Pin | BA1_Pin | SDCLK_Pin | SDNCAS_Pin;
+ 338              		.loc 1 389 0
+ 339 01de 48F23313 		movw	r3, #33075
+ 340 01e2 0993     		str	r3, [sp, #36]
+ 390:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 341              		.loc 1 390 0
+ 342 01e4 0A95     		str	r5, [sp, #40]
+ 391:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 343              		.loc 1 391 0
+ 344 01e6 0B94     		str	r4, [sp, #44]
+ 392:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 345              		.loc 1 392 0
+ 346 01e8 0C97     		str	r7, [sp, #48]
+ 393:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
+ 347              		.loc 1 393 0
+ 348 01ea CDF83480 		str	r8, [sp, #52]
+ 394:Src/main.c    ****   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 14
+
+
+ 349              		.loc 1 394 0
+ 350 01ee 09A9     		add	r1, sp, #36
+ 351 01f0 3348     		ldr	r0, .L3+16
+ 352 01f2 FFF7FEFF 		bl	HAL_GPIO_Init
+ 353              	.LVL16:
+ 395:Src/main.c    **** 
+ 396:Src/main.c    ****   /*Configure GPIO pins : D4_Pin D5_Pin D6_Pin D7_Pin 
+ 397:Src/main.c    ****                            D8_Pin D9_Pin D10_Pin D11_Pin 
+ 398:Src/main.c    ****                            D12_Pin NBL0_Pin NBL1_Pin */
+ 399:Src/main.c    ****   GPIO_InitStruct.Pin = D4_Pin | D5_Pin | D6_Pin | D7_Pin | D8_Pin | D9_Pin | D10_Pin | D11_Pin | D
+ 354              		.loc 1 399 0
+ 355 01f6 4FF68373 		movw	r3, #65411
+ 356 01fa 0993     		str	r3, [sp, #36]
+ 400:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 357              		.loc 1 400 0
+ 358 01fc 0A95     		str	r5, [sp, #40]
+ 401:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 359              		.loc 1 401 0
+ 360 01fe 0B94     		str	r4, [sp, #44]
+ 402:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 361              		.loc 1 402 0
+ 362 0200 0C97     		str	r7, [sp, #48]
+ 403:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
+ 363              		.loc 1 403 0
+ 364 0202 CDF83480 		str	r8, [sp, #52]
+ 404:Src/main.c    ****   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+ 365              		.loc 1 404 0
+ 366 0206 09A9     		add	r1, sp, #36
+ 367 0208 3048     		ldr	r0, .L3+28
+ 368 020a FFF7FEFF 		bl	HAL_GPIO_Init
+ 369              	.LVL17:
+ 405:Src/main.c    **** 
+ 406:Src/main.c    ****   /*Configure GPIO pins : G4_Pin G5_Pin B6_Pin B7_Pin */
+ 407:Src/main.c    ****   GPIO_InitStruct.Pin = G4_Pin | G5_Pin | B6_Pin | B7_Pin;
+ 370              		.loc 1 407 0
+ 371 020e 4FF47063 		mov	r3, #3840
+ 372 0212 0993     		str	r3, [sp, #36]
+ 408:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 373              		.loc 1 408 0
+ 374 0214 0A95     		str	r5, [sp, #40]
+ 409:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 375              		.loc 1 409 0
+ 376 0216 0B94     		str	r4, [sp, #44]
+ 410:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 377              		.loc 1 410 0
+ 378 0218 0C94     		str	r4, [sp, #48]
+ 411:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF14_LTDC;
+ 379              		.loc 1 411 0
+ 380 021a CDF83490 		str	r9, [sp, #52]
+ 412:Src/main.c    ****   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 381              		.loc 1 412 0
+ 382 021e 09A9     		add	r1, sp, #36
+ 383 0220 2948     		ldr	r0, .L3+24
+ 384 0222 FFF7FEFF 		bl	HAL_GPIO_Init
+ 385              	.LVL18:
+ 413:Src/main.c    **** 
+ 414:Src/main.c    ****   /*Configure GPIO pins : D13_Pin D14_Pin D15_Pin D0_Pin 
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 15
+
+
+ 415:Src/main.c    ****                            D1_Pin D2_Pin D3_Pin */
+ 416:Src/main.c    ****   GPIO_InitStruct.Pin = D13_Pin | D14_Pin | D15_Pin | D0_Pin | D1_Pin | D2_Pin | D3_Pin;
+ 386              		.loc 1 416 0
+ 387 0226 4CF20373 		movw	r3, #50947
+ 388 022a 0993     		str	r3, [sp, #36]
+ 417:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 389              		.loc 1 417 0
+ 390 022c 0A95     		str	r5, [sp, #40]
+ 418:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 391              		.loc 1 418 0
+ 392 022e 0B94     		str	r4, [sp, #44]
+ 419:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 393              		.loc 1 419 0
+ 394 0230 0C97     		str	r7, [sp, #48]
+ 420:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
+ 395              		.loc 1 420 0
+ 396 0232 CDF83480 		str	r8, [sp, #52]
+ 421:Src/main.c    ****   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+ 397              		.loc 1 421 0
+ 398 0236 09A9     		add	r1, sp, #36
+ 399 0238 2048     		ldr	r0, .L3+12
+ 400 023a FFF7FEFF 		bl	HAL_GPIO_Init
+ 401              	.LVL19:
+ 422:Src/main.c    **** 
+ 423:Src/main.c    ****   /*Configure GPIO pin : TE_Pin */
+ 424:Src/main.c    ****   GPIO_InitStruct.Pin = TE_Pin;
+ 402              		.loc 1 424 0
+ 403 023e 4FF40063 		mov	r3, #2048
+ 404 0242 0993     		str	r3, [sp, #36]
+ 425:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 405              		.loc 1 425 0
+ 406 0244 0A94     		str	r4, [sp, #40]
+ 426:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 407              		.loc 1 426 0
+ 408 0246 0B94     		str	r4, [sp, #44]
+ 427:Src/main.c    ****   HAL_GPIO_Init(TE_GPIO_Port, &GPIO_InitStruct);
+ 409              		.loc 1 427 0
+ 410 0248 09A9     		add	r1, sp, #36
+ 411 024a 1C48     		ldr	r0, .L3+12
+ 412 024c FFF7FEFF 		bl	HAL_GPIO_Init
+ 413              	.LVL20:
+ 428:Src/main.c    **** 
+ 429:Src/main.c    ****   /*Configure GPIO pins : RDX_Pin WRX_DCX_Pin */
+ 430:Src/main.c    ****   GPIO_InitStruct.Pin = RDX_Pin | WRX_DCX_Pin;
+ 414              		.loc 1 430 0
+ 415 0250 4FF44053 		mov	r3, #12288
+ 416 0254 0993     		str	r3, [sp, #36]
+ 431:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 417              		.loc 1 431 0
+ 418 0256 0A96     		str	r6, [sp, #40]
+ 432:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 419              		.loc 1 432 0
+ 420 0258 0B94     		str	r4, [sp, #44]
+ 433:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 421              		.loc 1 433 0
+ 422 025a 0C94     		str	r4, [sp, #48]
+ 434:Src/main.c    ****   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 16
+
+
+ 423              		.loc 1 434 0
+ 424 025c 09A9     		add	r1, sp, #36
+ 425 025e 1748     		ldr	r0, .L3+12
+ 426 0260 FFF7FEFF 		bl	HAL_GPIO_Init
+ 427              	.LVL21:
+ 435:Src/main.c    **** 
+ 436:Src/main.c    ****   /*Configure GPIO pins : R7_Pin DOTCLK_Pin B3_Pin */
+ 437:Src/main.c    ****   GPIO_InitStruct.Pin = R7_Pin | DOTCLK_Pin | B3_Pin;
+ 428              		.loc 1 437 0
+ 429 0264 4FF40C63 		mov	r3, #2240
+ 430 0268 0993     		str	r3, [sp, #36]
+ 438:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 431              		.loc 1 438 0
+ 432 026a 0A95     		str	r5, [sp, #40]
+ 439:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 433              		.loc 1 439 0
+ 434 026c 0B94     		str	r4, [sp, #44]
+ 440:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 435              		.loc 1 440 0
+ 436 026e 0C94     		str	r4, [sp, #48]
+ 441:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF14_LTDC;
+ 437              		.loc 1 441 0
+ 438 0270 CDF83490 		str	r9, [sp, #52]
+ 442:Src/main.c    ****   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+ 439              		.loc 1 442 0
+ 440 0274 09A9     		add	r1, sp, #36
+ 441 0276 1248     		ldr	r0, .L3+16
+ 442 0278 FFF7FEFF 		bl	HAL_GPIO_Init
+ 443              	.LVL22:
+ 443:Src/main.c    **** 
+ 444:Src/main.c    ****   /*Configure GPIO pins : HSYNC_Pin G6_Pin R2_Pin */
+ 445:Src/main.c    ****   GPIO_InitStruct.Pin = HSYNC_Pin | G6_Pin | R2_Pin;
+ 444              		.loc 1 445 0
+ 445 027c 4FF49863 		mov	r3, #1216
+ 446 0280 0993     		str	r3, [sp, #36]
+ 446:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 447              		.loc 1 446 0
+ 448 0282 0A95     		str	r5, [sp, #40]
+ 447:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 449              		.loc 1 447 0
+ 450 0284 0B94     		str	r4, [sp, #44]
+ 448:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 451              		.loc 1 448 0
+ 452 0286 0C94     		str	r4, [sp, #48]
+ 449:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF14_LTDC;
+ 453              		.loc 1 449 0
+ 454 0288 CDF83490 		str	r9, [sp, #52]
+ 450:Src/main.c    ****   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 455              		.loc 1 450 0
+ 456 028c 09A9     		add	r1, sp, #36
+ 457 028e 0948     		ldr	r0, .L3+4
+ 458 0290 FFF7FEFF 		bl	HAL_GPIO_Init
+ 459              	.LVL23:
+ 451:Src/main.c    **** 
+ 452:Src/main.c    ****   /*Configure GPIO pin : I2C3_SDA_Pin */
+ 453:Src/main.c    ****   GPIO_InitStruct.Pin = I2C3_SDA_Pin;
+ 460              		.loc 1 453 0
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 17
+
+
+ 461 0294 4FF40073 		mov	r3, #512
+ 462 0298 0993     		str	r3, [sp, #36]
+ 454:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+ 463              		.loc 1 454 0
+ 464 029a 4FF0120B 		mov	fp, #18
+ 465 029e CDF828B0 		str	fp, [sp, #40]
+ 455:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 466              		.loc 1 455 0
+ 467 02a2 0B96     		str	r6, [sp, #44]
+ 456:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 468              		.loc 1 456 0
+ 469 02a4 0C94     		str	r4, [sp, #48]
+ 457:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF4_I2C3;
+ 470              		.loc 1 457 0
+ 471 02a6 CDF834A0 		str	r10, [sp, #52]
+ 458:Src/main.c    ****   HAL_GPIO_Init(I2C3_SDA_GPIO_Port, &GPIO_InitStruct);
+ 472              		.loc 1 458 0
+ 473 02aa 09A9     		add	r1, sp, #36
+ 474 02ac 12E0     		b	.L4
+ 475              	.L5:
+ 476 02ae 00BF     		.align	2
+ 477              	.L3:
+ 478 02b0 00380240 		.word	1073887232
+ 479 02b4 00080240 		.word	1073874944
+ 480 02b8 00000240 		.word	1073872896
+ 481 02bc 000C0240 		.word	1073875968
+ 482 02c0 00180240 		.word	1073879040
+ 483 02c4 00140240 		.word	1073878016
+ 484 02c8 00040240 		.word	1073873920
+ 485 02cc 00100240 		.word	1073876992
+ 486 02d0 00001210 		.word	269615104
+ 487              	.L4:
+ 488 02d4 1F48     		ldr	r0, .L6
+ 489 02d6 FFF7FEFF 		bl	HAL_GPIO_Init
+ 490              	.LVL24:
+ 459:Src/main.c    **** 
+ 460:Src/main.c    ****   /*Configure GPIO pin : I2C3_SCL_Pin */
+ 461:Src/main.c    ****   GPIO_InitStruct.Pin = I2C3_SCL_Pin;
+ 491              		.loc 1 461 0
+ 492 02da 4FF48073 		mov	r3, #256
+ 493 02de 0993     		str	r3, [sp, #36]
+ 462:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+ 494              		.loc 1 462 0
+ 495 02e0 CDF828B0 		str	fp, [sp, #40]
+ 463:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 496              		.loc 1 463 0
+ 497 02e4 0B96     		str	r6, [sp, #44]
+ 464:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 498              		.loc 1 464 0
+ 499 02e6 0C94     		str	r4, [sp, #48]
+ 465:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF4_I2C3;
+ 500              		.loc 1 465 0
+ 501 02e8 CDF834A0 		str	r10, [sp, #52]
+ 466:Src/main.c    ****   HAL_GPIO_Init(I2C3_SCL_GPIO_Port, &GPIO_InitStruct);
+ 502              		.loc 1 466 0
+ 503 02ec 09A9     		add	r1, sp, #36
+ 504 02ee 1A48     		ldr	r0, .L6+4
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 18
+
+
+ 505 02f0 FFF7FEFF 		bl	HAL_GPIO_Init
+ 506              	.LVL25:
+ 467:Src/main.c    **** 
+ 468:Src/main.c    ****   /*Configure GPIO pins : G7_Pin B2_Pin */
+ 469:Src/main.c    ****   GPIO_InitStruct.Pin = G7_Pin | B2_Pin;
+ 507              		.loc 1 469 0
+ 508 02f4 4823     		movs	r3, #72
+ 509 02f6 0993     		str	r3, [sp, #36]
+ 470:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 510              		.loc 1 470 0
+ 511 02f8 0A95     		str	r5, [sp, #40]
+ 471:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 512              		.loc 1 471 0
+ 513 02fa 0B94     		str	r4, [sp, #44]
+ 472:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 514              		.loc 1 472 0
+ 515 02fc 0C94     		str	r4, [sp, #48]
+ 473:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF14_LTDC;
+ 516              		.loc 1 473 0
+ 517 02fe CDF83490 		str	r9, [sp, #52]
+ 474:Src/main.c    ****   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+ 518              		.loc 1 474 0
+ 519 0302 09A9     		add	r1, sp, #36
+ 520 0304 1548     		ldr	r0, .L6+8
+ 521 0306 FFF7FEFF 		bl	HAL_GPIO_Init
+ 522              	.LVL26:
+ 475:Src/main.c    **** 
+ 476:Src/main.c    ****   /*Configure GPIO pins : G3_Pin B4_Pin */
+ 477:Src/main.c    ****   GPIO_InitStruct.Pin = G3_Pin | B4_Pin;
+ 523              		.loc 1 477 0
+ 524 030a 4FF4A053 		mov	r3, #5120
+ 525 030e 0993     		str	r3, [sp, #36]
+ 478:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 526              		.loc 1 478 0
+ 527 0310 0A95     		str	r5, [sp, #40]
+ 479:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 528              		.loc 1 479 0
+ 529 0312 0B94     		str	r4, [sp, #44]
+ 480:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 530              		.loc 1 480 0
+ 531 0314 0C94     		str	r4, [sp, #48]
+ 481:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF9_LTDC;
+ 532              		.loc 1 481 0
+ 533 0316 0923     		movs	r3, #9
+ 534 0318 0D93     		str	r3, [sp, #52]
+ 482:Src/main.c    ****   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+ 535              		.loc 1 482 0
+ 536 031a 09A9     		add	r1, sp, #36
+ 537 031c 1048     		ldr	r0, .L6+12
+ 538 031e FFF7FEFF 		bl	HAL_GPIO_Init
+ 539              	.LVL27:
+ 483:Src/main.c    **** 
+ 484:Src/main.c    ****   /*Configure GPIO pins : LD3_Pin LD4_Pin */
+ 485:Src/main.c    ****   GPIO_InitStruct.Pin = LD3_Pin | LD4_Pin;
+ 540              		.loc 1 485 0
+ 541 0322 4FF4C043 		mov	r3, #24576
+ 542 0326 0993     		str	r3, [sp, #36]
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 19
+
+
+ 486:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 543              		.loc 1 486 0
+ 544 0328 0A96     		str	r6, [sp, #40]
+ 487:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 545              		.loc 1 487 0
+ 546 032a 0B94     		str	r4, [sp, #44]
+ 488:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 547              		.loc 1 488 0
+ 548 032c 0C94     		str	r4, [sp, #48]
+ 489:Src/main.c    ****   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+ 549              		.loc 1 489 0
+ 550 032e 09A9     		add	r1, sp, #36
+ 551 0330 0B48     		ldr	r0, .L6+12
+ 552 0332 FFF7FEFF 		bl	HAL_GPIO_Init
+ 553              	.LVL28:
+ 490:Src/main.c    **** 
+ 491:Src/main.c    ****   /*Configure GPIO pins : SDCKE1_Pin SDNE1_Pin */
+ 492:Src/main.c    ****   GPIO_InitStruct.Pin = SDCKE1_Pin | SDNE1_Pin;
+ 554              		.loc 1 492 0
+ 555 0336 6023     		movs	r3, #96
+ 556 0338 0993     		str	r3, [sp, #36]
+ 493:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 557              		.loc 1 493 0
+ 558 033a 0A95     		str	r5, [sp, #40]
+ 494:Src/main.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 559              		.loc 1 494 0
+ 560 033c 0B94     		str	r4, [sp, #44]
+ 495:Src/main.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 561              		.loc 1 495 0
+ 562 033e 0C97     		str	r7, [sp, #48]
+ 496:Src/main.c    ****   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
+ 563              		.loc 1 496 0
+ 564 0340 CDF83480 		str	r8, [sp, #52]
+ 497:Src/main.c    ****   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 565              		.loc 1 497 0
+ 566 0344 09A9     		add	r1, sp, #36
+ 567 0346 0748     		ldr	r0, .L6+16
+ 568 0348 FFF7FEFF 		bl	HAL_GPIO_Init
+ 569              	.LVL29:
+ 498:Src/main.c    **** }
+ 570              		.loc 1 498 0
+ 571 034c 0FB0     		add	sp, sp, #60
+ 572              	.LCFI2:
+ 573              		.cfi_def_cfa_offset 36
+ 574              		@ sp needed
+ 575 034e BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 576              	.L7:
+ 577 0352 00BF     		.align	2
+ 578              	.L6:
+ 579 0354 00080240 		.word	1073874944
+ 580 0358 00000240 		.word	1073872896
+ 581 035c 000C0240 		.word	1073875968
+ 582 0360 00180240 		.word	1073879040
+ 583 0364 00040240 		.word	1073873920
+ 584              		.cfi_endproc
+ 585              	.LFE128:
+ 587              		.section	.text._Error_Handler,"ax",%progbits
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 20
+
+
+ 588              		.align	1
+ 589              		.global	_Error_Handler
+ 590              		.syntax unified
+ 591              		.thumb
+ 592              		.thumb_func
+ 593              		.fpu fpv4-sp-d16
+ 595              	_Error_Handler:
+ 596              	.LFB129:
+ 499:Src/main.c    **** 
+ 500:Src/main.c    **** /* USER CODE BEGIN 4 */
+ 501:Src/main.c    **** 
+ 502:Src/main.c    **** /* USER CODE END 4 */
+ 503:Src/main.c    **** 
+ 504:Src/main.c    **** /**
+ 505:Src/main.c    ****   * @brief  This function is executed in case of error occurrence.
+ 506:Src/main.c    ****   * @param  None
+ 507:Src/main.c    ****   * @retval None
+ 508:Src/main.c    ****   */
+ 509:Src/main.c    **** void _Error_Handler(char *file, int line)
+ 510:Src/main.c    **** {
+ 597              		.loc 1 510 0
+ 598              		.cfi_startproc
+ 599              		@ Volatile: function does not return.
+ 600              		@ args = 0, pretend = 0, frame = 0
+ 601              		@ frame_needed = 0, uses_anonymous_args = 0
+ 602              		@ link register save eliminated.
+ 603              	.LVL30:
+ 604              	.L9:
+ 605 0000 FEE7     		b	.L9
+ 606              		.cfi_endproc
+ 607              	.LFE129:
+ 609              		.section	.text.SystemClock_Config,"ax",%progbits
+ 610              		.align	1
+ 611              		.global	SystemClock_Config
+ 612              		.syntax unified
+ 613              		.thumb
+ 614              		.thumb_func
+ 615              		.fpu fpv4-sp-d16
+ 617              	SystemClock_Config:
+ 618              	.LFB127:
+ 148:Src/main.c    **** 
+ 619              		.loc 1 148 0
+ 620              		.cfi_startproc
+ 621              		@ args = 0, pretend = 0, frame = 80
+ 622              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148:Src/main.c    **** 
+ 623              		.loc 1 148 0
+ 624 0000 00B5     		push	{lr}
+ 625              	.LCFI3:
+ 626              		.cfi_def_cfa_offset 4
+ 627              		.cfi_offset 14, -4
+ 628 0002 95B0     		sub	sp, sp, #84
+ 629              	.LCFI4:
+ 630              		.cfi_def_cfa_offset 88
+ 631              	.LBB12:
+ 155:Src/main.c    **** 
+ 632              		.loc 1 155 0
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 21
+
+
+ 633 0004 0021     		movs	r1, #0
+ 634 0006 0191     		str	r1, [sp, #4]
+ 635 0008 2B4B     		ldr	r3, .L16
+ 636 000a 1A6C     		ldr	r2, [r3, #64]
+ 637 000c 42F08052 		orr	r2, r2, #268435456
+ 638 0010 1A64     		str	r2, [r3, #64]
+ 639 0012 1B6C     		ldr	r3, [r3, #64]
+ 640 0014 03F08053 		and	r3, r3, #268435456
+ 641 0018 0193     		str	r3, [sp, #4]
+ 642 001a 019B     		ldr	r3, [sp, #4]
+ 643              	.LBE12:
+ 644              	.LBB13:
+ 157:Src/main.c    **** 
+ 645              		.loc 1 157 0
+ 646 001c 0291     		str	r1, [sp, #8]
+ 647 001e 274B     		ldr	r3, .L16+4
+ 648 0020 1A68     		ldr	r2, [r3]
+ 649 0022 42F44042 		orr	r2, r2, #49152
+ 650 0026 1A60     		str	r2, [r3]
+ 651 0028 1B68     		ldr	r3, [r3]
+ 652 002a 03F44043 		and	r3, r3, #49152
+ 653 002e 0293     		str	r3, [sp, #8]
+ 654 0030 029B     		ldr	r3, [sp, #8]
+ 655              	.LBE13:
+ 161:Src/main.c    ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+ 656              		.loc 1 161 0
+ 657 0032 0123     		movs	r3, #1
+ 658 0034 0893     		str	r3, [sp, #32]
+ 162:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 659              		.loc 1 162 0
+ 660 0036 4FF48033 		mov	r3, #65536
+ 661 003a 0993     		str	r3, [sp, #36]
+ 163:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+ 662              		.loc 1 163 0
+ 663 003c 0223     		movs	r3, #2
+ 664 003e 0E93     		str	r3, [sp, #56]
+ 164:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLM = 4;
+ 665              		.loc 1 164 0
+ 666 0040 4FF48002 		mov	r2, #4194304
+ 667 0044 0F92     		str	r2, [sp, #60]
+ 165:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLN = 168;
+ 668              		.loc 1 165 0
+ 669 0046 0422     		movs	r2, #4
+ 670 0048 1092     		str	r2, [sp, #64]
+ 166:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+ 671              		.loc 1 166 0
+ 672 004a A822     		movs	r2, #168
+ 673 004c 1192     		str	r2, [sp, #68]
+ 167:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLQ = 7;
+ 674              		.loc 1 167 0
+ 675 004e 1293     		str	r3, [sp, #72]
+ 168:Src/main.c    ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 676              		.loc 1 168 0
+ 677 0050 0723     		movs	r3, #7
+ 678 0052 1393     		str	r3, [sp, #76]
+ 169:Src/main.c    ****   {
+ 679              		.loc 1 169 0
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 22
+
+
+ 680 0054 08A8     		add	r0, sp, #32
+ 681 0056 FFF7FEFF 		bl	HAL_RCC_OscConfig
+ 682              	.LVL31:
+ 683 005a 20BB     		cbnz	r0, .L14
+ 176:Src/main.c    ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+ 684              		.loc 1 176 0
+ 685 005c 0F23     		movs	r3, #15
+ 686 005e 0393     		str	r3, [sp, #12]
+ 177:Src/main.c    ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 687              		.loc 1 177 0
+ 688 0060 0223     		movs	r3, #2
+ 689 0062 0493     		str	r3, [sp, #16]
+ 178:Src/main.c    ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+ 690              		.loc 1 178 0
+ 691 0064 0023     		movs	r3, #0
+ 692 0066 0593     		str	r3, [sp, #20]
+ 179:Src/main.c    ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+ 693              		.loc 1 179 0
+ 694 0068 4FF4A053 		mov	r3, #5120
+ 695 006c 0693     		str	r3, [sp, #24]
+ 180:Src/main.c    **** 
+ 696              		.loc 1 180 0
+ 697 006e 4FF48053 		mov	r3, #4096
+ 698 0072 0793     		str	r3, [sp, #28]
+ 182:Src/main.c    ****   {
+ 699              		.loc 1 182 0
+ 700 0074 0521     		movs	r1, #5
+ 701 0076 03A8     		add	r0, sp, #12
+ 702 0078 FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 703              	.LVL32:
+ 704 007c B8B9     		cbnz	r0, .L15
+ 189:Src/main.c    **** 
+ 705              		.loc 1 189 0
+ 706 007e FFF7FEFF 		bl	HAL_RCC_GetHCLKFreq
+ 707              	.LVL33:
+ 708 0082 0F4B     		ldr	r3, .L16+8
+ 709 0084 A3FB0030 		umull	r3, r0, r3, r0
+ 710 0088 8009     		lsrs	r0, r0, #6
+ 711 008a FFF7FEFF 		bl	HAL_SYSTICK_Config
+ 712              	.LVL34:
+ 193:Src/main.c    **** 
+ 713              		.loc 1 193 0
+ 714 008e 0420     		movs	r0, #4
+ 715 0090 FFF7FEFF 		bl	HAL_SYSTICK_CLKSourceConfig
+ 716              	.LVL35:
+ 196:Src/main.c    **** }
+ 717              		.loc 1 196 0
+ 718 0094 0022     		movs	r2, #0
+ 719 0096 1146     		mov	r1, r2
+ 720 0098 4FF0FF30 		mov	r0, #-1
+ 721 009c FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 722              	.LVL36:
+ 197:Src/main.c    **** 
+ 723              		.loc 1 197 0
+ 724 00a0 15B0     		add	sp, sp, #84
+ 725              	.LCFI5:
+ 726              		.cfi_remember_state
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 23
+
+
+ 727              		.cfi_def_cfa_offset 4
+ 728              		@ sp needed
+ 729 00a2 5DF804FB 		ldr	pc, [sp], #4
+ 730              	.L14:
+ 731              	.LCFI6:
+ 732              		.cfi_restore_state
+ 171:Src/main.c    ****   }
+ 733              		.loc 1 171 0
+ 734 00a6 AB21     		movs	r1, #171
+ 735 00a8 0648     		ldr	r0, .L16+12
+ 736 00aa FFF7FEFF 		bl	_Error_Handler
+ 737              	.LVL37:
+ 738              	.L15:
+ 184:Src/main.c    ****   }
+ 739              		.loc 1 184 0
+ 740 00ae B821     		movs	r1, #184
+ 741 00b0 0448     		ldr	r0, .L16+12
+ 742 00b2 FFF7FEFF 		bl	_Error_Handler
+ 743              	.LVL38:
+ 744              	.L17:
+ 745 00b6 00BF     		.align	2
+ 746              	.L16:
+ 747 00b8 00380240 		.word	1073887232
+ 748 00bc 00700040 		.word	1073770496
+ 749 00c0 D34D6210 		.word	274877907
+ 750 00c4 00000000 		.word	.LC0
+ 751              		.cfi_endproc
+ 752              	.LFE127:
+ 754              		.section	.text.main,"ax",%progbits
+ 755              		.align	1
+ 756              		.global	main
+ 757              		.syntax unified
+ 758              		.thumb
+ 759              		.thumb_func
+ 760              		.fpu fpv4-sp-d16
+ 762              	main:
+ 763              	.LFB126:
+  82:Src/main.c    **** 
+ 764              		.loc 1 82 0
+ 765              		.cfi_startproc
+ 766              		@ Volatile: function does not return.
+ 767              		@ args = 0, pretend = 0, frame = 0
+ 768              		@ frame_needed = 1, uses_anonymous_args = 0
+ 769 0000 80B5     		push	{r7, lr}
+ 770              	.LCFI7:
+ 771              		.cfi_def_cfa_offset 8
+ 772              		.cfi_offset 7, -8
+ 773              		.cfi_offset 14, -4
+ 774 0002 00AF     		add	r7, sp, #0
+ 775              	.LCFI8:
+ 776              		.cfi_def_cfa_register 7
+  91:Src/main.c    **** 
+ 777              		.loc 1 91 0
+ 778 0004 FFF7FEFF 		bl	HAL_Init
+ 779              	.LVL39:
+  98:Src/main.c    **** 
+ 780              		.loc 1 98 0
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 24
+
+
+ 781 0008 FFF7FEFF 		bl	SystemClock_Config
+ 782              	.LVL40:
+ 105:Src/main.c    **** 
+ 783              		.loc 1 105 0
+ 784 000c FFF7FEFF 		bl	MX_GPIO_Init
+ 785              	.LVL41:
+ 108:Src/main.c    ****   {
+ 786              		.loc 1 108 0
+ 787 0010 0121     		movs	r1, #1
+ 788 0012 1648     		ldr	r0, .L23
+ 789 0014 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 790              	.LVL42:
+ 791 0018 0128     		cmp	r0, #1
+ 792 001a 02D0     		beq	.L22
+ 793              	.L19:
+ 132:Src/main.c    **** 
+ 794              		.loc 1 132 0
+ 795 001c FFF7FEFF 		bl	MX_USB_DEVICE_Init
+ 796              	.LVL43:
+ 797              	.L20:
+ 798 0020 FEE7     		b	.L20
+ 799              	.L22:
+ 110:Src/main.c    ****     /* Test if user code is programmed starting from address 0x0800C000 */
+ 800              		.loc 1 110 0
+ 801 0022 0122     		movs	r2, #1
+ 802 0024 4FF40051 		mov	r1, #8192
+ 803 0028 1148     		ldr	r0, .L23+4
+ 804 002a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 805              	.LVL44:
+ 112:Src/main.c    ****     {
+ 806              		.loc 1 112 0
+ 807 002e 114B     		ldr	r3, .L23+8
+ 808 0030 1A68     		ldr	r2, [r3]
+ 809 0032 114B     		ldr	r3, .L23+12
+ 810 0034 1340     		ands	r3, r3, r2
+ 811 0036 B3F1005F 		cmp	r3, #536870912
+ 812 003a EFD1     		bne	.L19
+ 114:Src/main.c    ****       /* Jump to user application */
+ 813              		.loc 1 114 0
+ 814 003c 0122     		movs	r2, #1
+ 815 003e 4FF48041 		mov	r1, #16384
+ 816 0042 0B48     		ldr	r0, .L23+4
+ 817 0044 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 818              	.LVL45:
+ 116:Src/main.c    ****       JumpToApplication = (pFunction)JumpAddress;
+ 819              		.loc 1 116 0
+ 820 0048 0C4B     		ldr	r3, .L23+16
+ 821 004a 1B68     		ldr	r3, [r3]
+ 822 004c 0C4A     		ldr	r2, .L23+20
+ 823 004e 1360     		str	r3, [r2]
+ 117:Src/main.c    **** 
+ 824              		.loc 1 117 0
+ 825 0050 0C4C     		ldr	r4, .L23+24
+ 826 0052 2360     		str	r3, [r4]
+ 120:Src/main.c    **** 
+ 827              		.loc 1 120 0
+ 828 0054 FFF7FEFF 		bl	HAL_DeInit
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 25
+
+
+ 829              	.LVL46:
+ 123:Src/main.c    **** 
+ 830              		.loc 1 123 0
+ 831 0058 064B     		ldr	r3, .L23+8
+ 832 005a 0B4A     		ldr	r2, .L23+28
+ 833 005c 9360     		str	r3, [r2, #8]
+ 126:Src/main.c    ****       JumpToApplication();
+ 834              		.loc 1 126 0
+ 835 005e 1B68     		ldr	r3, [r3]
+ 836              	.LVL47:
+ 837              	.LBB14:
+ 838              	.LBB15:
+ 839              		.file 2 "Drivers/CMSIS/Include/cmsis_gcc.h"
+   1:Drivers/CMSIS/Include/cmsis_gcc.h **** /**************************************************************************//**
+   2:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @brief    CMSIS Cortex-M Core Function/Instruction Header File
+   4:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @version  V4.30
+   5:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @date     20. October 2015
+   6:Drivers/CMSIS/Include/cmsis_gcc.h ****  ******************************************************************************/
+   7:Drivers/CMSIS/Include/cmsis_gcc.h **** /* Copyright (c) 2009 - 2015 ARM LIMITED
+   8:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+   9:Drivers/CMSIS/Include/cmsis_gcc.h ****    All rights reserved.
+  10:Drivers/CMSIS/Include/cmsis_gcc.h ****    Redistribution and use in source and binary forms, with or without
+  11:Drivers/CMSIS/Include/cmsis_gcc.h ****    modification, are permitted provided that the following conditions are met:
+  12:Drivers/CMSIS/Include/cmsis_gcc.h ****    - Redistributions of source code must retain the above copyright
+  13:Drivers/CMSIS/Include/cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer.
+  14:Drivers/CMSIS/Include/cmsis_gcc.h ****    - Redistributions in binary form must reproduce the above copyright
+  15:Drivers/CMSIS/Include/cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer in the
+  16:Drivers/CMSIS/Include/cmsis_gcc.h ****      documentation and/or other materials provided with the distribution.
+  17:Drivers/CMSIS/Include/cmsis_gcc.h ****    - Neither the name of ARM nor the names of its contributors may be used
+  18:Drivers/CMSIS/Include/cmsis_gcc.h ****      to endorse or promote products derived from this software without
+  19:Drivers/CMSIS/Include/cmsis_gcc.h ****      specific prior written permission.
+  20:Drivers/CMSIS/Include/cmsis_gcc.h ****    *
+  21:Drivers/CMSIS/Include/cmsis_gcc.h ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:Drivers/CMSIS/Include/cmsis_gcc.h ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:Drivers/CMSIS/Include/cmsis_gcc.h ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:Drivers/CMSIS/Include/cmsis_gcc.h ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+  25:Drivers/CMSIS/Include/cmsis_gcc.h ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:Drivers/CMSIS/Include/cmsis_gcc.h ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:Drivers/CMSIS/Include/cmsis_gcc.h ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:Drivers/CMSIS/Include/cmsis_gcc.h ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:Drivers/CMSIS/Include/cmsis_gcc.h ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:Drivers/CMSIS/Include/cmsis_gcc.h ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:Drivers/CMSIS/Include/cmsis_gcc.h ****    POSSIBILITY OF SUCH DAMAGE.
+  32:Drivers/CMSIS/Include/cmsis_gcc.h ****    ---------------------------------------------------------------------------*/
+  33:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  34:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  35:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  36:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  37:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  38:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ignore some GCC warnings */
+  39:Drivers/CMSIS/Include/cmsis_gcc.h **** #if defined ( __GNUC__ )
+  40:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic push
+  41:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+  42:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  43:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  44:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 26
+
+
+  45:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  46:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  47:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+  48:Drivers/CMSIS/Include/cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+  49:Drivers/CMSIS/Include/cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+  50:Drivers/CMSIS/Include/cmsis_gcc.h ****   @{
+  51:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  52:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  53:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+  54:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Enable IRQ Interrupts
+  55:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
+  56:Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+  57:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  58:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
+  59:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+  60:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+  61:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+  62:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  63:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  64:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+  65:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Disable IRQ Interrupts
+  66:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
+  67:Drivers/CMSIS/Include/cmsis_gcc.h ****   Can only be executed in Privileged modes.
+  68:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  69:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
+  70:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+  71:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+  72:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+  73:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  74:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  75:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+  76:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Control Register
+  77:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the Control Register.
+  78:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               Control Register value
+  79:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  80:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_CONTROL(void)
+  81:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+  82:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+  83:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  84:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, control" : "=r" (result) );
+  85:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+  86:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+  87:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  88:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  89:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+  90:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Control Register
+  91:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Writes the given value to the Control Register.
+  92:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    control  Control Register value to set
+  93:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  94:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_CONTROL(uint32_t control)
+  95:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+  96:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR control, %0" : : "r" (control) : "memory");
+  97:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+  98:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  99:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 100:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 101:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get IPSR Register
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 27
+
+
+ 102:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the IPSR Register.
+ 103:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               IPSR Register value
+ 104:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 105:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_IPSR(void)
+ 106:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 107:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 108:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 109:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, ipsr" : "=r" (result) );
+ 110:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 111:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 112:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 113:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 114:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 115:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get APSR Register
+ 116:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the APSR Register.
+ 117:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               APSR Register value
+ 118:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 119:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_APSR(void)
+ 120:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 121:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 122:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 123:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, apsr" : "=r" (result) );
+ 124:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 125:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 126:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 127:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 128:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 129:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get xPSR Register
+ 130:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the xPSR Register.
+ 131:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 132:Drivers/CMSIS/Include/cmsis_gcc.h ****     \return               xPSR Register value
+ 133:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 134:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_xPSR(void)
+ 135:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 136:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 137:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 138:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, xpsr" : "=r" (result) );
+ 139:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 140:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 141:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 142:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 143:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 144:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Process Stack Pointer
+ 145:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current value of the Process Stack Pointer (PSP).
+ 146:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               PSP Register value
+ 147:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 148:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PSP(void)
+ 149:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 150:Drivers/CMSIS/Include/cmsis_gcc.h ****   register uint32_t result;
+ 151:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 152:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, psp\n"  : "=r" (result) );
+ 153:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 154:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 155:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 156:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 157:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 158:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Process Stack Pointer
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 28
+
+
+ 159:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the Process Stack Pointer (PSP).
+ 160:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    topOfProcStack  Process Stack Pointer value to set
+ 161:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 162:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
+ 163:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 164:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR psp, %0\n" : : "r" (topOfProcStack) : "sp");
+ 165:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 166:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 167:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 168:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 169:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Main Stack Pointer
+ 170:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current value of the Main Stack Pointer (MSP).
+ 171:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               MSP Register value
+ 172:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 173:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_MSP(void)
+ 174:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 175:Drivers/CMSIS/Include/cmsis_gcc.h ****   register uint32_t result;
+ 176:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 177:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, msp\n" : "=r" (result) );
+ 178:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 179:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 180:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 181:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 182:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 183:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Main Stack Pointer
+ 184:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the Main Stack Pointer (MSP).
+ 185:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 186:Drivers/CMSIS/Include/cmsis_gcc.h ****     \param [in]    topOfMainStack  Main Stack Pointer value to set
+ 187:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 188:Drivers/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
+ 189:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 190:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR msp, %0\n" : : "r" (topOfMainStack) : "sp");
+ 840              		.loc 2 190 0
+ 841              		.syntax unified
+ 842              	@ 190 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 843 0060 83F30888 		MSR msp, r3
+ 844              	
+ 845              	@ 0 "" 2
+ 846              	.LVL48:
+ 847              		.thumb
+ 848              		.syntax unified
+ 849              	.LBE15:
+ 850              	.LBE14:
+ 127:Src/main.c    ****     }
+ 851              		.loc 1 127 0
+ 852 0064 2368     		ldr	r3, [r4]
+ 853 0066 9847     		blx	r3
+ 854              	.LVL49:
+ 855 0068 D8E7     		b	.L19
+ 856              	.L24:
+ 857 006a 00BF     		.align	2
+ 858              	.L23:
+ 859 006c 00000240 		.word	1073872896
+ 860 0070 00180240 		.word	1073879040
+ 861 0074 00C00008 		.word	134266880
+ 862 0078 0000F82F 		.word	804782080
+ 863 007c 04C00008 		.word	134266884
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 29
+
+
+ 864 0080 00000000 		.word	JumpAddress
+ 865 0084 00000000 		.word	JumpToApplication
+ 866 0088 00ED00E0 		.word	-536810240
+ 867              		.cfi_endproc
+ 868              	.LFE126:
+ 870              		.comm	JumpAddress,4,4
+ 871              		.comm	JumpToApplication,4,4
+ 872              		.section	.rodata.SystemClock_Config.str1.4,"aMS",%progbits,1
+ 873              		.align	2
+ 874              	.LC0:
+ 875 0000 5372632F 		.ascii	"Src/main.c\000"
+ 875      6D61696E 
+ 875      2E6300
+ 876              		.text
+ 877              	.Letext0:
+ 878              		.file 3 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\machine\\_default_ty
+ 879              		.file 4 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 880              		.file 5 "Drivers/CMSIS/Include/core_cm4.h"
+ 881              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 882              		.file 7 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 883              		.file 8 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\sys\\lock.h"
+ 884              		.file 9 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\sys\\_types.h"
+ 885              		.file 10 "d:\\gnu tools arm embedded\\7 2017-q4-major\\lib\\gcc\\arm-none-eabi\\7.2.1\\include\\st
+ 886              		.file 11 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\sys\\reent.h"
+ 887              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 888              		.file 13 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h"
+ 889              		.file 14 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h"
+ 890              		.file 15 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 891              		.file 16 "d:\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\\stdlib.h"
+ 892              		.file 17 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h"
+ 893              		.file 18 "Inc/usb_device.h"
+ 894              		.file 19 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h"
+ 895              		.file 20 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ARM GAS  C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s 			page 30
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:18     .text.MX_GPIO_Init:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:24     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:478    .text.MX_GPIO_Init:000002b0 $d
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:488    .text.MX_GPIO_Init:000002d4 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:579    .text.MX_GPIO_Init:00000354 $d
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:588    .text._Error_Handler:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:595    .text._Error_Handler:00000000 _Error_Handler
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:610    .text.SystemClock_Config:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:617    .text.SystemClock_Config:00000000 SystemClock_Config
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:747    .text.SystemClock_Config:000000b8 $d
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:755    .text.main:00000000 $t
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:762    .text.main:00000000 main
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:859    .text.main:0000006c $d
+                            *COM*:00000004 JumpAddress
+                            *COM*:00000004 JumpToApplication
+C:\Users\ZHENGY~1\AppData\Local\Temp\ccn6aT2Y.s:873    .rodata.SystemClock_Config.str1.4:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_RCC_GetHCLKFreq
+HAL_SYSTICK_Config
+HAL_SYSTICK_CLKSourceConfig
+HAL_NVIC_SetPriority
+HAL_Init
+HAL_GPIO_ReadPin
+MX_USB_DEVICE_Init
+HAL_DeInit
